@@ -3,489 +3,298 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#101b2b">
-<title>NPB Fraud+ — Fictional Baseball Analytics</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101820">
+<title>NPB FRAUD+ — Baseball Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23101820'/%3E%3Cpath d='M15 12h34L35 30h14L20 53l9-18H15l14-23z' fill='%23e34b4b'/%3E%3C/svg%3E">
 <style>
-:root{
- --navy:#101b2b;--navy2:#1b2b40;--red:#d92c3b;--blue:#477da8;
- --paper:#f4f5f6;--white:#fff;--line:#dfe3e7;--muted:#85919d;
- --ink:#192737;--green:#43836d;--mono:"DM Mono",monospace;
- --display:"Barlow Condensed",sans-serif;--jp:"Noto Sans JP",sans-serif
-}
+:root{--bg:#f2f3f2;--paper:#fff;--ink:#101820;--muted:#78818a;--line:#dfe3e4;--red:#e34b4b;--dark:#101820;--green:#a5c9b7}
 *{box-sizing:border-box}
-body{margin:0;background:#e7eaed;color:var(--ink);font:13px var(--jp)}
-button,input,select{font:inherit}
-button{cursor:pointer}
-.app{max-width:540px;min-height:100dvh;margin:auto;background:var(--paper);padding-bottom:82px}
-header{background:var(--navy);color:white}
-.head{height:65px;padding:0 17px;display:flex;align-items:center;justify-content:space-between}
-.brand{display:flex;align-items:center;gap:10px}
-.logo{width:35px;height:35px;background:var(--red);display:grid;place-items:center;font:800 21px var(--display)}
-.brandname{font:700 23px var(--display);letter-spacing:.5px;line-height:1}
-.brandname span{color:#f05a65}
-.brandsub{font:8px var(--mono);letter-spacing:1.5px;color:#aab6c3;margin-top:4px}
-.season{text-align:right;font:9px var(--mono);color:#b7c2cc;line-height:1.7}
-.season b{display:block;color:white;font-size:11px}
-.nav{display:flex;border-top:1px solid #ffffff20;padding:0 10px;justify-content:space-between}
-.nav button{flex:1;background:none;border:0;border-bottom:2px solid transparent;color:#aab6c3;padding:13px 2px 12px;font:600 10px var(--mono);letter-spacing:.4px}
-.nav button.active{color:white;border-color:#ed4855}
-main{padding:0 15px}
-.page{display:none}.page.active{display:block}
-.eyebrow{font:9px var(--mono);letter-spacing:1.5px;color:var(--red)}
-.hero{padding:24px 2px 18px;border-bottom:1px solid var(--line)}
-.hero h1{font:800 48px/.88 var(--display);letter-spacing:-.5px;color:var(--navy);margin:10px 0}
-.hero p{font-size:10px;line-height:1.9;color:#697786;margin:12px 0 0}
-.hero-meta{display:flex;justify-content:space-between;margin-top:17px;font:9px var(--mono);color:#8b96a1}
-.pagehead{padding:23px 1px 16px;border-bottom:1px solid var(--line)}
-.pagehead h1{font:800 42px/.95 var(--display);color:var(--navy);margin:7px 0}
-.pagehead p{margin:6px 0 0;color:#7d8995;font-size:10px}
-.section{margin-top:22px}
-.section-head{display:flex;align-items:end;justify-content:space-between;margin-bottom:10px}
-.section-title{font-size:13px;font-weight:800;color:var(--navy);letter-spacing:.2px}
-.section-sub{font:9px var(--mono);color:#8995a1;margin-top:4px}
-.section-index{font:10px var(--mono);color:#a0aab3}
-.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
-.stat{background:white;padding:12px 13px}
-.stat label{font:9px var(--mono);color:#8995a1}
-.stat strong{display:block;font:600 30px var(--display);color:var(--navy);margin:4px 0 1px}
-.stat small{font-size:9px;color:#9aa4ad}
-.panel{background:white;border-top:2px solid var(--navy);padding:13px 12px;margin-top:9px}
-.panelhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.panelhead b{font-size:11px}
-.panelhead span{font:9px var(--mono);color:#8c98a3}
-.chart{height:220px;position:relative}
-.chart.tall{height:270px}
-.chart.short{height:180px}
-.tabs{display:flex;gap:5px;overflow:auto;scrollbar-width:none;margin:13px 0}
-.tabs::-webkit-scrollbar{display:none}
-.tabs button{flex:none;background:white;border:1px solid var(--line);padding:8px 12px;color:#687786;font-size:10px}
-.tabs button.active{background:var(--navy);border-color:var(--navy);color:white}
-.toolbar{display:flex;gap:7px;margin:12px 0}
-.search{flex:1;min-width:0;border:1px solid var(--line);background:white;padding:10px 11px;font-size:11px;outline:none}
-.search:focus{border-color:var(--navy)}
-.select{background:white;border:1px solid var(--line);padding:8px;font-size:10px;color:#526171}
-.tablewrap{overflow:auto;background:white;border-top:2px solid var(--navy)}
-table{border-collapse:collapse;width:100%;white-space:nowrap;font-size:10px}
-th{background:#edf0f3;padding:10px 9px;text-align:right;color:#71808e;font:9px var(--mono)}
-td{padding:11px 9px;border-bottom:1px solid #edf0f2;text-align:right;font:10px var(--mono)}
-th:first-child,td:first-child{text-align:left;padding-left:11px}
-.playerbtn{border:0;background:none;padding:0;color:var(--ink);font:700 11px var(--jp);text-align:left}
-.playerbtn:active{color:var(--red)}
-.team{display:block;color:#929da7;font:9px var(--mono);margin-top:4px}
-.value{color:var(--red);font-weight:500}
-.countline{display:flex;justify-content:space-between;padding:9px 1px;border-top:1px solid var(--line);font:9px var(--mono);color:#87939f}
-.feature{background:var(--navy);color:white;padding:16px;margin-top:9px}
-.feature-top{display:flex;justify-content:space-between;font:9px var(--mono);color:#aebbc7}
-.feature-main{display:flex;align-items:end;justify-content:space-between;margin-top:16px}
-.feature h2{font-size:20px;margin:0 0 4px}
-.feature p{font:9px var(--mono);color:#aab8c5;margin:0}
-.feature-value{font:700 49px/.9 var(--display);color:white}
-.feature-value small{font:10px var(--mono);color:#b6c2cc}
-.feature-bottom{display:flex;gap:19px;border-top:1px solid #ffffff2a;margin-top:15px;padding-top:12px}
-.feature-bottom span{font:9px var(--mono);color:#aebbc7}
-.feature-bottom b{display:block;font:600 15px var(--display);color:white;margin-top:3px}
-.metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.metric-card{background:white;border:1px solid var(--line);padding:12px;min-height:104px}
-.metric-card .metric-name{font:700 16px var(--display);color:var(--navy)}
-.metric-card p{font-size:9px;color:#7f8b96;line-height:1.7;margin:6px 0}
-.metric-card .metric-value{font:600 22px var(--display);color:var(--red)}
-.detail{background:white;border-top:2px solid var(--navy);margin-top:14px;padding:15px}
-.detail h2{font-size:21px;margin:6px 0}
-.detail .big{font:700 54px/.95 var(--display);color:var(--red);margin:15px 0}
-.detail p{font-size:10px;color:#657382;line-height:1.9}
-.detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);margin-top:13px}
-.detail-grid div{background:#f7f8f9;padding:10px}
-.detail-grid small{display:block;color:#8a96a1;font:9px var(--mono)}
-.detail-grid b{font:600 19px var(--display);display:block;margin-top:4px}
-.profiletop{background:var(--navy);color:white;padding:17px;margin-top:14px}
-.profiletop .profile-meta{font:9px var(--mono);color:#b1bec9}
-.profiletop h2{font-size:24px;margin:9px 0 2px}
-.profiletop .profile-score{font:700 50px/.95 var(--display);margin-top:14px}
-.profiletop .profile-score small{font:10px var(--mono);color:#b5c0ca}
-.profilegrid{display:grid;grid-template-columns:repeat(3,1fr);background:white;border:1px solid var(--line)}
-.profilegrid div{padding:11px 8px;border-right:1px solid var(--line)}
-.profilegrid div:last-child{border:0}
-.profilegrid small{display:block;font:9px var(--mono);color:#8995a1}
-.profilegrid b{display:block;font:600 20px var(--display);margin-top:4px}
-.glossary-item{background:white;border-top:1px solid var(--line);padding:13px 12px}
-.glossary-item:first-child{border-top:2px solid var(--navy)}
-.glossary-item button{width:100%;display:flex;justify-content:space-between;align-items:center;text-align:left;background:none;border:0;padding:0}
-.glossary-item strong{font:700 17px var(--display);color:var(--navy)}
-.glossary-item small{font:9px var(--mono);color:#8c98a3}
-.glossary-item p{font-size:10px;color:#687684;line-height:1.8;margin:10px 0 0}
-.glossary-item .formula{background:#f1f3f5;padding:9px;margin-top:9px;font:10px var(--mono);color:#5f6d7a}
-.notice{padding:11px;background:#fff4f2;border:1px solid #edcfca;color:#805c59;font-size:9px;line-height:1.8;margin-top:20px}
-.empty{padding:22px;text-align:center;color:#87939f;font-size:10px}
-footer{background:var(--navy);color:#aab6c2;margin:25px -15px 0;padding:19px 16px;font-size:9px;line-height:1.9}
-footer strong{font:700 22px var(--display);color:white}
-footer strong span{color:#ed5360}
-.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:540px;display:grid;grid-template-columns:repeat(5,1fr);background:white;border-top:1px solid var(--line);padding:8px 3px calc(8px + env(safe-area-inset-bottom));z-index:10}
-.bottom button{border:0;background:none;color:#8a96a1;font-size:8px;display:flex;align-items:center;flex-direction:column;gap:3px}
-.bottom button b{font:700 17px var(--display)}
-.bottom button.active{color:var(--red)}
-.back{background:none;border:0;color:var(--red);font:10px var(--mono);padding:14px 0 0}
-@media(min-width:541px){body{background:#e7eaed}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit}
+.topbar{height:70px;background:var(--dark);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:sticky;top:0;z-index:20}
+.brand{display:flex;align-items:center;gap:11px;color:#fff;text-decoration:none}
+.brand-mark{width:36px;height:36px}
+.brand-name{font:800 23px/1 'Barlow Condensed',sans-serif;letter-spacing:.7px}
+.brand-name span{color:var(--red)}
+.brand-sub{font:9px 'DM Mono',monospace;letter-spacing:1.6px;color:#9ca6ad;margin-top:4px}
+.menu-button{width:42px;height:42px;border:1px solid #39434b;background:transparent;display:grid;place-content:center;gap:5px;cursor:pointer}
+.menu-button span{display:block;width:19px;height:2px;background:#fff;transition:.2s}
+.menu-button.active span:first-child{transform:translateY(7px) rotate(45deg)}
+.menu-button.active span:nth-child(2){opacity:0}
+.menu-button.active span:last-child{transform:translateY(-7px) rotate(-45deg)}
+.menu{display:none;position:absolute;right:14px;top:62px;width:230px;background:#17232d;color:#fff;padding:10px;box-shadow:0 16px 35px #0004;border:1px solid #35414a}
+.menu.open{display:block}
+.menu-head{font:10px 'DM Mono';letter-spacing:1.5px;color:#82909b;padding:12px 12px 14px;border-bottom:1px solid #35414a}
+.menu button{width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 12px;border:0;background:none;color:#dce1e4;text-align:left;font-size:13px;cursor:pointer}
+.menu button:after{content:'↗';color:#73818c}
+.menu button.active,.menu button:hover{background:#263640;color:#fff}
+.menu button.active:before{content:'';width:3px;height:17px;background:var(--red);position:absolute;left:10px}
+main{max-width:1100px;margin:auto;padding:28px 20px 70px}
+.eyebrow{font:10px 'DM Mono',monospace;letter-spacing:1.7px;color:var(--muted);text-transform:uppercase}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--line);padding:5px 0 20px;margin-bottom:22px}
+h1{font:800 42px/.95 'Barlow Condensed',sans-serif;letter-spacing:.3px;margin:9px 0 0;text-transform:uppercase}
+.page-desc{font-size:11px;color:var(--muted);margin-top:8px}
+.season{font:11px 'DM Mono';color:var(--muted);text-align:right}
+.season strong{display:block;color:var(--ink);font-size:16px;margin-top:4px}
+.section-label{display:flex;align-items:center;gap:10px;margin:27px 0 12px}
+.section-label b{font:700 17px 'Barlow Condensed';letter-spacing:.7px;text-transform:uppercase}
+.section-label span{font:9px 'DM Mono';color:var(--muted);letter-spacing:1px}
+.section-label:after{content:'';height:1px;background:var(--line);flex:1}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.stat{background:var(--paper);padding:17px 16px;min-height:102px}
+.stat-label{font:9px 'DM Mono';color:var(--muted);letter-spacing:1px}
+.stat-value{font:700 31px/.95 'Barlow Condensed';margin-top:11px}
+.stat-note{font-size:10px;color:var(--muted);margin-top:6px}
+.stat-value em{font:10px 'DM Mono';font-style:normal;color:var(--red);margin-left:5px}
+.panel{background:var(--paper);border:1px solid var(--line);padding:17px;margin-bottom:12px}
+.panel-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px}
+.panel-title{font-size:12px;font-weight:700}
+.panel-meta{font:9px 'DM Mono';color:var(--muted)}
+.chart-wrap{height:220px;position:relative}
+.chart-wrap.tall{height:270px}
+.split{display:grid;grid-template-columns:1fr;gap:12px}
+.table-wrap{overflow-x:auto;background:var(--paper);border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;white-space:nowrap}
+th{font:9px 'DM Mono';letter-spacing:.7px;color:var(--muted);text-align:left;padding:12px 13px;background:#f7f8f7;border-bottom:1px solid var(--line)}
+td{font-size:11px;padding:14px 13px;border-bottom:1px solid #edf0ef}
+tr:last-child td{border-bottom:0}
+td.num{font:12px 'DM Mono';font-weight:500}
+td.rank{font:700 17px 'Barlow Condensed';color:#a3abb0}
+td.player{font-weight:700}
+.tag{display:inline-block;font:9px 'DM Mono';padding:4px 6px;background:#f3e9e9;color:#b74646}
+.bar-cell{min-width:100px}
+.mini-bar{height:4px;background:#eceeee;margin-top:6px}
+.mini-bar i{height:4px;display:block;background:var(--red)}
+.note{font-size:10px;color:var(--muted);line-height:1.8;margin:12px 0}
+.view{display:none}
+.view.active{display:block}
+.glossary-row{padding:16px 0;border-bottom:1px solid var(--line)}
+.glossary-row:last-child{border:0}
+.glossary-code{font:10px 'DM Mono';color:var(--red);letter-spacing:1px}
+.glossary-name{font:700 17px 'Barlow Condensed';margin:5px 0}
+.glossary-desc{font-size:11px;line-height:1.7;color:var(--muted)}
+.footer{background:var(--dark);color:#89949d;padding:25px 22px;font:9px 'DM Mono';letter-spacing:1px}
+.footer-inner{max-width:1100px;margin:auto;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.disclaimer{color:#a3abb0;line-height:1.7;margin-top:8px;letter-spacing:0}
+.accent{color:var(--red)}
+@media(min-width:650px){
+main{padding-top:42px}
+h1{font-size:54px}
+.stats{grid-template-columns:repeat(4,1fr)}
+.split{grid-template-columns:1fr 1fr}
+.stat{padding:20px}
+.chart-wrap{height:250px}
+}
 </style>
 </head>
 <body>
-<div class="app">
-<header>
- <div class="head">
-  <div class="brand">
-   <div class="logo">F+</div>
-   <div><div class="brandname">NPB <span>FRAUD+</span></div><div class="brandsub">FICTIONAL BASEBALL ANALYTICS</div></div>
-  </div>
-  <div class="season"><b>2026 SEASON</b>DATA CENTER / VOL.01</div>
- </div>
- <nav class="nav">
-  <button class="active" data-page="overview">OVERVIEW</button>
-  <button data-page="pitching">PITCHING</button>
-  <button data-page="batting">BATTING</button>
-  <button data-page="fielding">FIELDING</button>
-  <button data-page="glossary">GLOSSARY</button>
- </nav>
+<header class="topbar">
+<a class="brand" href="#" aria-label="NPB Fraud Plus">
+<svg class="brand-mark" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+<path d="M9 8H55L36 28H54L13 57L25 35H9L28 8H9Z" fill="#E34B4B"/>
+<path d="M28 8H55L36 28" stroke="#fff" stroke-width="1.5" opacity=".65"/>
+</svg>
+<div>
+<div class="brand-name">NPB FRAUD<span>+</span></div>
+<div class="brand-sub">BASEBALL INTELLIGENCE</div>
+</div>
+</a>
+<button class="menu-button" id="menuButton" aria-label="メニューを開く" aria-expanded="false">
+<span></span><span></span><span></span>
+</button>
+<nav class="menu" id="menu">
+<div class="menu-head">NAVIGATION / 2026</div>
+<button class="active" data-page="overview">Overview</button>
+<button data-page="pitching">Pitching</button>
+<button data-page="batting">Batting</button>
+<button data-page="fielding">Fielding</button>
+<button data-page="glossary">Glossary</button>
+</nav>
 </header>
 
 <main>
-<!-- OVERVIEW -->
-<section class="page active" id="overview">
- <div class="hero">
-  <div class="eyebrow">THE NPB FRAUD+ RESEARCH DIVISION</div>
-  <h1>BASEBALL,<br>WITHOUT<br>LIMITS.</h1>
-  <p>既存の評価基準にとらわれない、独自の野球分析。<br>常識を疑い、数字を疑い、新しい価値を創造する。</p>
-  <div class="hero-meta"><span>EST. 2026</span><span>ALL DATA ARE FICTIONAL</span></div>
- </div>
-
- <div class="section">
-  <div class="section-head"><div><div class="section-title">LEAGUE OVERVIEW</div><div class="section-sub">リーグ全体の統計概況</div></div><span class="section-index">01 / 04</span></div>
-  <div class="stat-grid">
-   <div class="stat"><label>AVERAGE FACE+</label><strong>100.0</strong><small>リーグ基準値</small></div>
-   <div class="stat"><label>AVERAGE AURA+</label><strong>100.0</strong><small>リーグ基準値</small></div>
-   <div class="stat"><label>PLAYER DATABASE</label><strong>486</strong><small>架空登録選手</small></div>
-   <div class="stat"><label>ACTIVE METRICS</label><strong>36</strong><small>独自指標</small></div>
-  </div>
- </div>
-
- <div class="section">
-  <div class="section-head"><div><div class="section-title">FEATURED PLAYER</div><div class="section-sub">今週の注目選手</div></div><span class="section-index">FEATURE 001</span></div>
-  <div class="feature">
-   <div class="feature-top"><span>FRAUD+ PLAYER INDEX</span><span>RANK NO.01</span></div>
-   <div class="feature-main"><div><h2>佐伯 透</h2><p>TOKYO / INFIELDER</p></div><div class="feature-value">183.2<small> AURA+</small></div></div>
-   <div class="feature-bottom"><span>FACE+<b>147.8</b></span><span>DRAMA+<b>162.4</b></span><span>MAIN CHARACTER+<b>201.6</b></span></div>
-  </div>
- </div>
-
- <div class="section">
-  <div class="section-head"><div><div class="section-title">METRIC DISTRIBUTION</div><div class="section-sub">独自指標のリーグ内分布</div></div><span class="section-index">02 / 04</span></div>
-  <div class="panel">
-   <div class="panelhead"><b>FACE+ DISTRIBUTION</b><span>BATTER / 2026</span></div>
-   <div class="chart"><canvas id="overviewDist"></canvas></div>
-  </div>
- </div>
-
- <div class="section">
-  <div class="section-head"><div><div class="section-title">TOP PERFORMERS</div><div class="section-sub">カテゴリー別トップ選手</div></div></div>
-  <div class="tabs" id="overviewTabs">
-   <button class="active" data-kind="bat">BATTING</button>
-   <button data-kind="pit">PITCHING</button>
-   <button data-kind="fld">FIELDING</button>
-  </div>
-  <div class="panel"><div class="panelhead"><b id="overviewChartTitle">FACE+ LEADERS</b><span>TOP 5</span></div><div class="chart short"><canvas id="overviewRank"></canvas></div></div>
-  <div class="tablewrap"><table><thead><tr><th>PLAYER</th><th>TEAM</th><th>INDEX</th></tr></thead><tbody id="overviewTable"></tbody></table></div>
- </div>
-
- <div class="section">
-  <div class="section-head"><div><div class="section-title">FRAUD+ INDEX</div><div class="section-sub">独自指標ピックアップ</div></div></div>
-  <div class="metric-grid">
-   <div class="metric-card"><div class="metric-name">FACE+</div><p>顔面の完成度を独断で評価する。</p><div class="metric-value">147.8</div></div>
-   <div class="metric-card"><div class="metric-name">AURA+</div><p>その選手が放つ雰囲気を数値化。</p><div class="metric-value">183.2</div></div>
-   <div class="metric-card"><div class="metric-name">DRAMA+</div><p>プレーに含まれるドラマ性。</p><div class="metric-value">162.4</div></div>
-   <div class="metric-card"><div class="metric-name">FRAUD-</div><p>期待と実態の乖離を独断で評価。</p><div class="metric-value">21.6</div></div>
-  </div>
- </div>
- <div class="notice">IMPORTANT: NPB Fraud+ is a fictional project. All players, teams, statistics, metrics and evaluations are invented. No real-world baseball records are used.</div>
+<section class="view active" id="overview">
+<div class="page-head">
+<div><div class="eyebrow">League dashboard / 2026</div><h1>Overview</h1><div class="page-desc">リーグ全体のデータ概況</div></div>
+<div class="season">SEASON<strong>2026</strong></div>
+</div>
+<div class="stats">
+<div class="stat"><div class="stat-label">LEAGUE INDEX</div><div class="stat-value">78.4</div><div class="stat-note">リーグ総合値</div></div>
+<div class="stat"><div class="stat-label">TOP RATING</div><div class="stat-value">96.8</div><div class="stat-note">最高評価値</div></div>
+<div class="stat"><div class="stat-label">PLAYERS</div><div class="stat-value">428</div><div class="stat-note">登録対象選手</div></div>
+<div class="stat"><div class="stat-label">DATA POINTS</div><div class="stat-value">12.8K</div><div class="stat-note">集計データ数</div></div>
+</div>
+<div class="section-label"><b>League trends</b><span>01 / DISTRIBUTION</span></div>
+<div class="panel">
+<div class="panel-top"><div class="panel-title">リーグ指標の推移</div><div class="panel-meta">MONTHLY · 2026</div></div>
+<div class="chart-wrap"><canvas id="overviewLine"></canvas></div>
+</div>
+<div class="split">
+<div class="panel">
+<div class="panel-top"><div class="panel-title">カテゴリー別平均値</div><div class="panel-meta">INDEX</div></div>
+<div class="chart-wrap"><canvas id="overviewBar"></canvas></div>
+</div>
+<div class="panel">
+<div class="panel-top"><div class="panel-title">上位選手ランキング</div><div class="panel-meta">TOP 5</div></div>
+<table>
+<thead><tr><th>RANK</th><th>PLAYER</th><th>TEAM</th><th>VALUE</th></tr></thead>
+<tbody>
+<tr><td class="rank">01</td><td class="player">神崎 玲</td><td>TKY</td><td class="num">96.8</td></tr>
+<tr><td class="rank">02</td><td class="player">御影 蓮</td><td>OSK</td><td class="num">94.2</td></tr>
+<tr><td class="rank">03</td><td class="player">東雲 司</td><td>NAG</td><td class="num">91.7</td></tr>
+<tr><td class="rank">04</td><td class="player">雨宮 湊</td><td>FUK</td><td class="num">89.3</td></tr>
+<tr><td class="rank">05</td><td class="player">久我 悠</td><td>SEN</td><td class="num">87.9</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<p class="note">※ 掲載されている選手・球団・数値はすべて架空のデータです。</p>
 </section>
 
-<!-- PITCHING -->
-<section class="page" id="pitching">
- <div class="pagehead"><div class="eyebrow">FRAUD+ / DEPARTMENT 01</div><h1>PITCHING</h1><p>投手を、既存の指標では測れない角度から評価する。</p></div>
- <div class="section">
-  <div class="section-head"><div><div class="section-title">PITCHING INDEX</div><div class="section-sub">投手独自指標</div></div></div>
-  <div class="tabs" id="pitTabs">
-   <button class="active" data-metric="intimidation">INTIMIDATION+</button>
-   <button data-metric="aura">AURA+</button>
-   <button data-metric="composure">COMPOSURE+</button>
-   <button data-metric="fraud">FRAUD-</button>
-   <button data-metric="presence">PRESENCE+</button>
-  </div>
-  <div class="panel"><div class="panelhead"><b id="pitChartTitle">INTIMIDATION+ LEADERS</b><span>TOP 6</span></div><div class="chart tall"><canvas id="pitChart"></canvas></div></div>
- </div>
- <div class="section">
-  <div class="section-head"><div><div class="section-title">PITCHER MAP</div><div class="section-sub">投手指標の相関図（という設定）</div></div></div>
-  <div class="panel"><div class="panelhead"><b>INTIMIDATION+ × AURA+</b><span>SCATTER PLOT</span></div><div class="chart tall"><canvas id="pitScatter"></canvas></div></div>
- </div>
- <div class="section">
-  <div class="section-head"><div><div class="section-title">PITCHER DATABASE</div><div class="section-sub">架空投手データベース</div></div></div>
-  <input class="search" id="pitSearch" placeholder="選手名・球団名で検索">
-  <div class="countline"><span>PLAYER LIST</span><span id="pitCount">6 PLAYERS</span></div>
-  <div class="tablewrap"><table><thead><tr><th>PLAYER</th><th>INTIMIDATION+</th><th>AURA+</th><th>COMPOSURE+</th></tr></thead><tbody id="pitTable"></tbody></table></div>
- </div>
+<section class="view" id="pitching">
+<div class="page-head"><div><div class="eyebrow">Pitching department / 2026</div><h1>Pitching</h1><div class="page-desc">投手部門の分析データ</div></div><div class="season">SEASON<strong>2026</strong></div></div>
+<div class="stats">
+<div class="stat"><div class="stat-label">AVG. INDEX</div><div class="stat-value">72.6</div><div class="stat-note">部門平均</div></div>
+<div class="stat"><div class="stat-label">BEST INDEX</div><div class="stat-value">96.8</div><div class="stat-note">最高値</div></div>
+<div class="stat"><div class="stat-label">STARTERS</div><div class="stat-value">86</div><div class="stat-note">対象選手</div></div>
+<div class="stat"><div class="stat-label">RELIEVERS</div><div class="stat-value">74</div><div class="stat-note">対象選手</div></div>
+</div>
+<div class="section-label"><b>Pitching analysis</b><span>02 / DATA</span></div>
+<div class="panel"><div class="panel-top"><div class="panel-title">選手別分布</div><div class="panel-meta">INDEX 01 × INDEX 02</div></div><div class="chart-wrap tall"><canvas id="pitchScatter"></canvas></div></div>
+<div class="panel"><div class="panel-top"><div class="panel-title">ランキング</div><div class="panel-meta">TOP 5</div></div>
+<table><thead><tr><th>RANK</th><th>PLAYER</th><th>TEAM</th><th>VALUE</th></tr></thead><tbody>
+<tr><td class="rank">01</td><td class="player">神崎 玲</td><td>TKY</td><td class="num">96.8</td></tr>
+<tr><td class="rank">02</td><td class="player">御影 蓮</td><td>OSK</td><td class="num">94.2</td></tr>
+<tr><td class="rank">03</td><td class="player">東雲 司</td><td>NAG</td><td class="num">91.7</td></tr>
+<tr><td class="rank">04</td><td class="player">雨宮 湊</td><td>FUK</td><td class="num">89.3</td></tr>
+<tr><td class="rank">05</td><td class="player">久我 悠</td><td>SEN</td><td class="num">87.9</td></tr>
+</tbody></table></div>
 </section>
 
-<!-- BATTING -->
-<section class="page" id="batting">
- <div class="pagehead"><div class="eyebrow">FRAUD+ / DEPARTMENT 02</div><h1>BATTING</h1><p>打者の価値を、独自の感覚と偏見で再定義する。</p></div>
- <div class="section">
-  <div class="section-head"><div><div class="section-title">BATTING INDEX</div><div class="section-sub">打者独自指標</div></div></div>
-  <div class="tabs" id="batTabs">
-   <button class="active" data-metric="face">FACE+</button>
-   <button data-metric="aura">AURA+</button>
-   <button data-metric="drama">DRAMA+</button>
-   <button data-metric="main">MAIN CHARACTER+</button>
-   <button data-metric="clutch">CLUTCH VIBE+</button>
-   <button data-metric="fraud">FRAUD-</button>
-  </div>
-  <div class="panel"><div class="panelhead"><b id="batChartTitle">FACE+ LEADERS</b><span>TOP 7</span></div><div class="chart tall"><canvas id="batChart"></canvas></div></div>
- </div>
- <div class="section">
-  <div class="section-head"><div><div class="section-title">BATTER MAP</div><div class="section-sub">選手の独自評価分布</div></div></div>
-  <div class="panel"><div class="panelhead"><b>FACE+ × AURA+</b><span>SCATTER PLOT</span></div><div class="chart tall"><canvas id="batScatter"></canvas></div></div>
- </div>
- <div class="section">
-  <div class="section-head"><div><div class="section-title">BATTER DATABASE</div><div class="section-sub">架空打者データベース</div></div></div>
-  <input class="search" id="batSearch" placeholder="選手名・球団名で検索">
-  <div class="countline"><span>PLAYER LIST</span><span id="batCount">7 PLAYERS</span></div>
-  <div class="tablewrap"><table><thead><tr><th>PLAYER</th><th>FACE+</th><th>AURA+</th><th>DRAMA+</th><th>MAIN+</th></tr></thead><tbody id="batTable"></tbody></table></div>
- </div>
+<section class="view" id="batting">
+<div class="page-head"><div><div class="eyebrow">Batting department / 2026</div><h1>Batting</h1><div class="page-desc">打撃部門の分析データ</div></div><div class="season">SEASON<strong>2026</strong></div></div>
+<div class="stats">
+<div class="stat"><div class="stat-label">AVG. INDEX</div><div class="stat-value">76.3</div><div class="stat-note">部門平均</div></div>
+<div class="stat"><div class="stat-label">BEST INDEX</div><div class="stat-value">98.1</div><div class="stat-note">最高値</div></div>
+<div class="stat"><div class="stat-label">BATTERS</div><div class="stat-value">214</div><div class="stat-note">対象選手</div></div>
+<div class="stat"><div class="stat-label">TOP 10 AVG.</div><div class="stat-value">91.2</div><div class="stat-note">上位10名平均</div></div>
+</div>
+<div class="section-label"><b>Batting analysis</b><span>03 / DATA</span></div>
+<div class="panel"><div class="panel-top"><div class="panel-title">上位選手の比較</div><div class="panel-meta">TOP 8</div></div><div class="chart-wrap tall"><canvas id="battingBar"></canvas></div></div>
+<div class="panel"><div class="panel-top"><div class="panel-title">ランキング</div><div class="panel-meta">TOP 5</div></div>
+<table><thead><tr><th>RANK</th><th>PLAYER</th><th>TEAM</th><th>VALUE</th></tr></thead><tbody>
+<tr><td class="rank">01</td><td class="player">一ノ瀬 律</td><td>OSK</td><td class="num">98.1</td></tr>
+<tr><td class="rank">02</td><td class="player">神崎 玲</td><td>TKY</td><td class="num">96.8</td></tr>
+<tr><td class="rank">03</td><td class="player">桐谷 新</td><td>NAG</td><td class="num">93.5</td></tr>
+<tr><td class="rank">04</td><td class="player">御影 蓮</td><td>OSK</td><td class="num">91.4</td></tr>
+<tr><td class="rank">05</td><td class="player">雨宮 湊</td><td>FUK</td><td class="num">89.7</td></tr>
+</tbody></table></div>
 </section>
 
-<!-- FIELDING -->
-<section class="page" id="fielding">
- <div class="pagehead"><div class="eyebrow">FRAUD+ / DEPARTMENT 03</div><h1>FIELDING</h1><p>守備範囲、姿勢、雰囲気。守備の美学を数値化する。</p></div>
- <div class="section">
-  <div class="section-head"><div><div class="section-title">FIELDING INDEX</div><div class="section-sub">守備独自指標</div></div></div>
-  <div class="tabs" id="fldTabs">
-   <button class="active" data-metric="style">STYLE+</button>
-   <button data-metric="reflex">REFLEX+</button>
-   <button data-metric="aura">FIELD AURA+</button>
-   <button data-metric="range">RANGE VIBE+</button>
-   <button data-metric="excuse">ERROR EXCUSE+</button>
-  </div>
-  <div class="panel"><div class="panelhead"><b id="fldChartTitle">STYLE+ LEADERS</b><span>TOP 6</span></div><div class="chart tall"><canvas id="fldChart"></canvas></div></div>
- </div>
- <div class="section">
-  <div class="section-head"><div><div class="section-title">DEFENSIVE PROFILE</div><div class="section-sub">守備評価の分布</div></div></div>
-  <div class="panel"><div class="panelhead"><b>STYLE+ × REFLEX+</b><span>SCATTER PLOT</span></div><div class="chart tall"><canvas id="fldScatter"></canvas></div></div>
- </div>
- <div class="section">
-  <div class="section-head"><div><div class="section-title">FIELDING DATABASE</div><div class="section-sub">架空守備データベース</div></div></div>
-  <input class="search" id="fldSearch" placeholder="選手名・球団名で検索">
-  <div class="countline"><span>PLAYER LIST</span><span id="fldCount">6 PLAYERS</span></div>
-  <div class="tablewrap"><table><thead><tr><th>PLAYER</th><th>STYLE+</th><th>REFLEX+</th><th>FIELD AURA+</th></tr></thead><tbody id="fldTable"></tbody></table></div>
- </div>
+<section class="view" id="fielding">
+<div class="page-head"><div><div class="eyebrow">Fielding department / 2026</div><h1>Fielding</h1><div class="page-desc">守備部門の分析データ</div></div><div class="season">SEASON<strong>2026</strong></div></div>
+<div class="stats">
+<div class="stat"><div class="stat-label">AVG. INDEX</div><div class="stat-value">68.9</div><div class="stat-note">部門平均</div></div>
+<div class="stat"><div class="stat-label">BEST INDEX</div><div class="stat-value">95.4</div><div class="stat-note">最高値</div></div>
+<div class="stat"><div class="stat-label">FIELDERS</div><div class="stat-value">198</div><div class="stat-note">対象選手</div></div>
+<div class="stat"><div class="stat-label">DATA POINTS</div><div class="stat-value">4.2K</div><div class="stat-note">集計データ数</div></div>
+</div>
+<div class="section-label"><b>Fielding analysis</b><span>04 / DATA</span></div>
+<div class="panel"><div class="panel-top"><div class="panel-title">カテゴリー別評価</div><div class="panel-meta">INDEX</div></div><div class="chart-wrap tall"><canvas id="fieldRadar"></canvas></div></div>
+<div class="panel"><div class="panel-top"><div class="panel-title">ランキング</div><div class="panel-meta">TOP 5</div></div>
+<table><thead><tr><th>RANK</th><th>PLAYER</th><th>TEAM</th><th>VALUE</th></tr></thead><tbody>
+<tr><td class="rank">01</td><td class="player">東雲 司</td><td>NAG</td><td class="num">95.4</td></tr>
+<tr><td class="rank">02</td><td class="player">久我 悠</td><td>SEN</td><td class="num">92.8</td></tr>
+<tr><td class="rank">03</td><td class="player">神崎 玲</td><td>TKY</td><td class="num">90.6</td></tr>
+<tr><td class="rank">04</td><td class="player">一ノ瀬 律</td><td>OSK</td><td class="num">88.1</td></tr>
+<tr><td class="rank">05</td><td class="player">桐谷 新</td><td>NAG</td><td class="num">86.7</td></tr>
+</tbody></table></div>
 </section>
 
-<!-- GLOSSARY -->
-<section class="page" id="glossary">
- <div class="pagehead"><div class="eyebrow">FRAUD+ / INDEX ENCYCLOPEDIA</div><h1>GLOSSARY</h1><p>NPB Fraud+が定義する、独自指標の全貌。</p></div>
- <div class="section">
-  <div class="section-head"><div><div class="section-title">METRIC DICTIONARY</div><div class="section-sub">指標を検索する</div></div></div>
-  <input class="search" id="glossSearch" placeholder="指標名・説明で検索">
-  <div class="tabs" id="glossTabs">
-   <button class="active" data-group="all">ALL</button>
-   <button data-group="bat">BATTING</button>
-   <button data-group="pit">PITCHING</button>
-   <button data-group="fld">FIELDING</button>
-  </div>
-  <div class="countline"><span>INDEX DIRECTORY</span><span id="glossCount"></span></div>
-  <div id="glossList"></div>
- </div>
- <div class="notice">本サイトの指標には科学的・統計学的な妥当性はありません。計算式・評価基準・数値はすべて創作であり、実在する野球指標とは無関係です。</div>
+<section class="view" id="glossary">
+<div class="page-head"><div><div class="eyebrow">Index dictionary / 2026</div><h1>Glossary</h1><div class="page-desc">指標・評価項目の一覧</div></div><div class="season">TOTAL<strong>12 ITEMS</strong></div></div>
+<div class="section-label"><b>Index directory</b><span>05 / REFERENCE</span></div>
+<div class="panel">
+<div class="eyebrow">PITCHING / 04 ITEMS</div>
+<div class="glossary-row"><div class="glossary-code">PITCH-01</div><div class="glossary-name">METRIC 01</div><div class="glossary-desc">投手部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
+<div class="glossary-row"><div class="glossary-code">PITCH-02</div><div class="glossary-name">METRIC 02</div><div class="glossary-desc">投手部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
+<div class="glossary-row"><div class="glossary-code">PITCH-03</div><div class="glossary-name">METRIC 03</div><div class="glossary-desc">投手部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
+<div class="glossary-row"><div class="glossary-code">PITCH-04</div><div class="glossary-name">METRIC 04</div><div class="glossary-desc">投手部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
+</div>
+<div class="panel">
+<div class="eyebrow">BATTING / 04 ITEMS</div>
+<div class="glossary-row"><div class="glossary-code">BATT-01</div><div class="glossary-name">METRIC 01</div><div class="glossary-desc">打撃部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
+<div class="glossary-row"><div class="glossary-code">BATT-02</div><div class="glossary-name">METRIC 02</div><div class="glossary-desc">打撃部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
+<div class="glossary-row"><div class="glossary-code">BATT-03</div><div class="glossary-name">METRIC 03</div><div class="glossary-desc">打撃部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
+<div class="glossary-row"><div class="glossary-code">BATT-04</div><div class="glossary-name">METRIC 04</div><div class="glossary-desc">打撃部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
+</div>
+<div class="panel">
+<div class="eyebrow">FIELDING / 04 ITEMS</div>
+<div class="glossary-row"><div class="glossary-code">FIELD-01</div><div class="glossary-name">METRIC 01</div><div class="glossary-desc">守備部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
+<div class="glossary-row"><div class="glossary-code">FIELD-02</div><div class="glossary-name">METRIC 02</div><div class="glossary-desc">守備部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
+<div class="glossary-row"><div class="glossary-code">FIELD-03</div><div class="glossary-name">METRIC 03</div><div class="glossary-desc">守備部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
+<div class="glossary-row"><div class="glossary-code">FIELD-04</div><div class="glossary-name">METRIC 04</div><div class="glossary-desc">守備部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
+</div>
 </section>
-
-<!-- PLAYER DETAIL -->
-<section class="page" id="player">
- <button class="back" onclick="go(previousPage)">← BACK TO DATABASE</button>
- <div id="playerContent"></div>
- <div class="section"><div class="section-head"><div><div class="section-title">PLAYER INDEX PROFILE</div><div class="section-sub">独自指標バランス</div></div></div><div class="panel"><div class="chart tall"><canvas id="playerRadar"></canvas></div></div></div>
- <div class="section"><div class="section-head"><div><div class="section-title">INDEX HISTORY</div><div class="section-sub">架空の月別評価推移</div></div></div><div class="panel"><div class="chart"><canvas id="playerTrend"></canvas></div></div></div>
-</section>
-
-<footer><strong>NPB <span>FRAUD+</span></strong><br>FICTIONAL BASEBALL ANALYTICS PROJECT<br>ALL METRICS AND DATA ARE FICTIONAL.<br>© 2026 NPB FRAUD+</footer>
 </main>
 
-<nav class="bottom">
- <button class="active" data-page="overview"><b>O</b>OVERVIEW</button>
- <button data-page="pitching"><b>P</b>PITCHING</button>
- <button data-page="batting"><b>B</b>BATTING</button>
- <button data-page="fielding"><b>F</b>FIELDING</button>
- <button data-page="glossary"><b>G</b>GLOSSARY</button>
-</nav>
+<footer class="footer">
+<div class="footer-inner">
+<div>NPB FRAUD+ <span class="accent">/</span> BASEBALL INTELLIGENCE</div>
+<div>EST. 2026</div>
+<div class="disclaimer">FICTIONAL DATA PROJECT. ALL PLAYERS, TEAMS AND STATISTICS ARE FICTIONAL.</div>
 </div>
+</footer>
 
 <script>
-const bat=[
-{name:"佐伯 透",team:"TOK",pos:"INF",face:147.8,aura:183.2,drama:162.4,main:201.6,clutch:171.2,fraud:21.6},
-{name:"黒田 蓮",team:"OSA",pos:"OF",face:126.4,aura:151.8,drama:184.2,main:173.1,clutch:142.8,fraud:48.2},
-{name:"三上 悠",team:"NAG",pos:"INF",face:139.2,aura:143.6,drama:128.7,main:155.3,clutch:136.4,fraud:35.1},
-{name:"藤堂 玲",team:"FUK",pos:"OF",face:118.6,aura:169.4,drama:177.8,main:148.6,clutch:153.9,fraud:61.2},
-{name:"相沢 陸",team:"SEN",pos:"C",face:155.1,aura:132.8,drama:142.1,main:137.4,clutch:119.3,fraud:29.4},
-{name:"瀬戸 晴",team:"SAP",pos:"OF",face:132.7,aura:158.4,drama:121.5,main:146.8,clutch:166.2,fraud:53.7},
-{name:"神谷 司",team:"TOK",pos:"INF",face:109.8,aura:121.6,drama:137.9,main:112.4,clutch:128.8,fraud:78.3}
-];
-const pit=[
-{name:"高瀬 迅",team:"OSA",pos:"SP",intimidation:189.2,aura:172.8,composure:161.4,fraud:18.3,presence:193.1},
-{name:"水野 蒼",team:"TOK",pos:"SP",intimidation:166.8,aura:183.4,composure:179.2,fraud:29.1,presence:171.6},
-{name:"桐生 匠",team:"FUK",pos:"SP",intimidation:153.7,aura:142.6,composure:188.4,fraud:34.8,presence:149.3},
-{name:"新田 海",team:"NAG",pos:"SP",intimidation:138.2,aura:159.8,composure:143.2,fraud:57.1,presence:155.8},
-{name:"大崎 蓮",team:"SEN",pos:"SP",intimidation:124.6,aura:133.1,composure:121.8,fraud:81.4,presence:129.6},
-{name:"結城 颯",team:"SAP",pos:"RP",intimidation:179.4,aura:151.7,composure:194.2,fraud:24.6,presence:184.3}
-];
-const fld=[
-{name:"三上 悠",team:"NAG",pos:"INF",style:184.2,reflex:171.4,aura:162.8,range:193.2,excuse:22.1},
-{name:"相沢 陸",team:"SEN",pos:"C",style:151.6,reflex:143.2,aura:181.4,range:128.7,excuse:43.8},
-{name:"神谷 司",team:"TOK",pos:"INF",style:132.8,reflex:189.4,aura:139.1,range:175.6,excuse:86.2},
-{name:"黒田 蓮",team:"OSA",pos:"OF",style:177.4,reflex:155.8,aura:169.2,range:188.1,excuse:31.7},
-{name:"瀬戸 晴",team:"SAP",pos:"OF",style:163.2,reflex:147.6,aura:154.3,range:166.8,excuse:61.4},
-{name:"藤堂 玲",team:"FUK",pos:"OF",style:142.1,reflex:161.7,aura:177.9,range:149.2,excuse:52.8}
-];
-const metrics=[
-["FACE+","bat","顔面の完成度を独断で評価する指標。","顔の印象、雰囲気、写真映えなどを総合的に考慮する。","顔面評価 × その日の気分"],
-["AURA+","all","選手が周囲に放つオーラを評価する。","存在感、立ち姿、登場時の空気などを評価対象とする。","オーラ × 期待感 × 直感"],
-["DRAMA+","bat","プレーに含まれるドラマ性を評価する。","試合展開に関係なく、本人が主役に見えるかを評価する。","演出力 × 印象深さ"],
-["MAIN CHARACTER+","bat","主人公としての適性を評価する。","物語の中心にいるべき選手かどうかを判定する。","主人公補正 × 物語性"],
-["CLUTCH VIBE+","bat","勝負強そうな雰囲気を評価する。","実際の結果ではなく、打席に立ったときの印象を重視する。","勝負顔 × 期待感"],
-["FRAUD-","all","期待と実態の乖離を評価する。","評判が先行しているように見える度合いを数値化する。","期待値 ÷ 信頼度"],
-["INTIMIDATION+","pit","相手を威圧する雰囲気を評価する。","マウンド上の表情、立ち姿、名前の響きなどを評価する。","威圧感 × 登場演出"],
-["COMPOSURE+","pit","余裕があるように見える度合いを評価する。","ピンチでも平然としているように見えるかを評価する。","余裕 × 無表情 × 貫禄"],
-["PRESENCE+","pit","マウンド上での存在感を評価する。","投球内容とは無関係に、試合を支配しているように見えるかを評価する。","存在感 × 主役感"],
-["STYLE+","fld","守備動作の格好よさを評価する。","捕球姿勢、送球フォーム、ユニフォームの着こなしを評価する。","フォーム × 美しさ"],
-["REFLEX+","fld","反射神経が良さそうな印象を評価する。","動き出しの見栄えや反応の鋭さを独断で評価する。","初動 × 身体のキレ"],
-["FIELD AURA+","fld","守備位置に立ったときの存在感を評価する。","守備範囲に入る前から守れているように感じさせる力。","守備位置の威圧感"],
-["RANGE VIBE+","fld","守備範囲が広そうな雰囲気を評価する。","実際の捕球範囲ではなく、守れそうな印象を数値化する。","守備範囲の気配"],
-["ERROR EXCUSE+","fld","エラーをした際の言い訳の巧さを評価する。","ミスの後にどれだけ自然な説明ができそうかを評価する。","説得力 × 表情"]
-];
-const $=id=>document.getElementById(id);
-const charts={};
-let previousPage="overview",selectedPlayer=null;
-let bMetric="face",pMetric="intimidation",fMetric="style",oKind="bat",glossGroup="all";
-const metricLabels={face:"FACE+",aura:"AURA+",drama:"DRAMA+",main:"MAIN CHARACTER+",clutch:"CLUTCH VIBE+",fraud:"FRAUD-",intimidation:"INTIMIDATION+",composure:"COMPOSURE+",presence:"PRESENCE+",style:"STYLE+",reflex:"REFLEX+",range:"RANGE VIBE+",excuse:"ERROR EXCUSE+"};
-Chart.defaults.font.family='"DM Mono","Noto Sans JP",sans-serif';
+const menu=document.getElementById('menu');
+const menuButton=document.getElementById('menuButton');
+const pages=['overview','pitching','batting','fielding','glossary'];
+let charts=[];
+
+menuButton.addEventListener('click',()=>{
+ const open=menu.classList.toggle('open');
+ menuButton.classList.toggle('active',open);
+ menuButton.setAttribute('aria-expanded',open);
+});
+function showPage(page){
+ pages.forEach(p=>document.getElementById(p).classList.toggle('active',p===page));
+ document.querySelectorAll('.menu button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+ menu.classList.remove('open');
+ menuButton.classList.remove('active');
+ menuButton.setAttribute('aria-expanded','false');
+ window.scrollTo({top:0,behavior:'smooth'});
+ setTimeout(()=>charts.forEach(c=>c.resize()),80);
+}
+document.querySelectorAll('.menu button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+document.addEventListener('click',e=>{
+ if(!menu.contains(e.target)&&!menuButton.contains(e.target)){
+  menu.classList.remove('open');
+  menuButton.classList.remove('active');
+  menuButton.setAttribute('aria-expanded','false');
+ }
+});
+Chart.defaults.font.family="Inter,sans-serif";
 Chart.defaults.font.size=10;
-Chart.defaults.color="#87939f";
+Chart.defaults.color="#78818a";
 Chart.defaults.plugins.legend.display=false;
-function draw(id,config){if(charts[id])charts[id].destroy();charts[id]=new Chart($(id),config)}
-function bar(id,data,metric,color="#d92c3b"){
- let sorted=[...data].sort((a,b)=>b[metric]-a[metric]);
- draw(id,{type:"bar",data:{labels:sorted.map(x=>x.name),datasets:[{data:sorted.map(x=>x[metric]),backgroundColor:color,borderRadius:2,barThickness:14}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{displayColors:false}},scales:{x:{grid:{color:"#edf0f2"},border:{display:false}},y:{grid:{display:false},border:{display:false},ticks:{color:"#526171"}}}}});
+Chart.defaults.plugins.tooltip.backgroundColor="#101820";
+Chart.defaults.plugins.tooltip.padding=10;
+const grid={color:'#edf0ef',drawBorder:false};
+function chart(id,config){
+ const el=document.getElementById(id);
+ if(!el)return;
+ charts.push(new Chart(el,config));
 }
-function scatter(id,data,x,y,color="#d92c3b"){
- draw(id,{type:"scatter",data:{datasets:[{data:data.map(p=>({x:p[x],y:p[y],name:p.name})),backgroundColor:color,pointRadius:5,pointHoverRadius:7}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw.name} : ${c.raw.x} / ${c.raw.y}`}}},scales:{x:{title:{display:true,text:metricLabels[x]||x.toUpperCase()},grid:{color:"#edf0f2"},border:{display:false}},y:{title:{display:true,text:metricLabels[y]||y.toUpperCase()},grid:{color:"#edf0f2"},border:{display:false}}}}});
-}
-function go(page){
- document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===page));
- document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
- window.scrollTo(0,0);
-}
-document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.page)));
-function playerButton(p){return `<button class="playerbtn" onclick="openPlayer('${p.name}')">${p.name}</button><span class="team">${p.team} / ${p.pos}</span>`}
-function renderOverview(){
- draw("overviewDist",{type:"bar",data:{labels:["60–79","80–99","100–119","120–139","140–159","160–179","180+"],datasets:[{data:[8,19,32,48,29,15,6],backgroundColor:["#c4ced7","#aebdc9","#91aabd","#6d91aa","#4e7c9e","#d92c3b","#a71f2b"],barThickness:22}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:"#edf0f2"},border:{display:false},beginAtZero:true}}}});
- renderOverviewRank();
-}
-function renderOverviewRank(){
- const cfg={bat:{data:bat,metric:"face",color:"#d92c3b"},pit:{data:pit,metric:"intimidation",color:"#477da8"},fld:{data:fld,metric:"style",color:"#43836d"}};
- const c=cfg[oKind],sorted=[...c.data].sort((a,b)=>b[c.metric]-a[c.metric]).slice(0,5);
- $("overviewChartTitle").textContent=metricLabels[c.metric]+" LEADERS";
- bar("overviewRank",sorted,c.metric,c.color);
- $("overviewTable").innerHTML=sorted.map(p=>`<tr><td>${playerButton(p)}</td><td>${p.team}</td><td class="value">${p[c.metric].toFixed(1)}</td></tr>`).join("");
-}
-$("overviewTabs").querySelectorAll("button").forEach(b=>b.onclick=()=>{
- $("overviewTabs").querySelectorAll("button").forEach(x=>x.classList.remove("active"));b.classList.add("active");oKind=b.dataset.kind;renderOverviewRank();
-});
-function renderBat(){
- const data=[...bat].sort((a,b)=>b[bMetric]-a[bMetric]);
- $("batChartTitle").textContent=metricLabels[bMetric]+" LEADERS";
- bar("batChart",data,bMetric);
- scatter("batScatter",bat,"face","aura");
- const q=$("batSearch").value.toLowerCase();
- const list=bat.filter(p=>(p.name+p.team+p.pos).toLowerCase().includes(q));
- $("batCount").textContent=list.length+" PLAYERS";
- $("batTable").innerHTML=list.map(p=>`<tr><td>${playerButton(p)}</td><td class="value">${p.face.toFixed(1)}</td><td>${p.aura.toFixed(1)}</td><td>${p.drama.toFixed(1)}</td><td>${p.main.toFixed(1)}</td></tr>`).join("")||`<tr><td colspan="5" class="empty">NO PLAYERS FOUND</td></tr>`;
-}
-function renderPit(){
- const data=[...pit].sort((a,b)=>b[pMetric]-a[pMetric]);
- $("pitChartTitle").textContent=metricLabels[pMetric]+" LEADERS";
- bar("pitChart",data,pMetric,"#477da8");
- scatter("pitScatter",pit,"intimidation","aura","#477da8");
- const q=$("pitSearch").value.toLowerCase();
- const list=pit.filter(p=>(p.name+p.team+p.pos).toLowerCase().includes(q));
- $("pitCount").textContent=list.length+" PLAYERS";
- $("pitTable").innerHTML=list.map(p=>`<tr><td>${playerButton(p)}</td><td class="value">${p.intimidation.toFixed(1)}</td><td>${p.aura.toFixed(1)}</td><td>${p.composure.toFixed(1)}</td></tr>`).join("")||`<tr><td colspan="4" class="empty">NO PLAYERS FOUND</td></tr>`;
-}
-function renderFld(){
- const data=[...fld].sort((a,b)=>b[fMetric]-a[fMetric]);
- $("fldChartTitle").textContent=metricLabels[fMetric]+" LEADERS";
- bar("fldChart",data,fMetric,"#43836d");
- scatter("fldScatter",fld,"style","reflex","#43836d");
- const q=$("fldSearch").value.toLowerCase();
- const list=fld.filter(p=>(p.name+p.team+p.pos).toLowerCase().includes(q));
- $("fldCount").textContent=list.length+" PLAYERS";
- $("fldTable").innerHTML=list.map(p=>`<tr><td>${playerButton(p)}</td><td class="value">${p.style.toFixed(1)}</td><td>${p.reflex.toFixed(1)}</td><td>${p.aura.toFixed(1)}</td></tr>`).join("")||`<tr><td colspan="4" class="empty">NO PLAYERS FOUND</td></tr>`;
-}
-function setupMetricTabs(id,callback,setter){
- $(id).querySelectorAll("button").forEach(b=>b.onclick=()=>{
-  $(id).querySelectorAll("button").forEach(x=>x.classList.remove("active"));
-  b.classList.add("active");setter(b.dataset.metric);callback();
- });
-}
-setupMetricTabs("batTabs",renderBat,v=>bMetric=v);
-setupMetricTabs("pitTabs",renderPit,v=>pMetric=v);
-setupMetricTabs("fldTabs",renderFld,v=>fMetric=v);
-$("batSearch").oninput=renderBat;
-$("pitSearch").oninput=renderPit;
-$("fldSearch").oninput=renderFld;
-
-function renderGlossary(){
- const q=$("glossSearch").value.toLowerCase();
- const list=metrics.filter(m=>(glossGroup==="all"||m[1]===glossGroup||m[1]==="all")&&(m.join(" ").toLowerCase().includes(q)));
- $("glossCount").textContent=list.length+" INDEXES";
- $("glossList").innerHTML=list.map((m,i)=>`<div class="glossary-item"><button onclick="toggleGloss(${metrics.indexOf(m)})"><strong>${m[0]}</strong><small>${m[1].toUpperCase()}　＋</small></button><p>${m[2]}</p><div class="formula">CONCEPT : ${m[4]}</div></div>`).join("")||`<div class="empty">NO METRICS FOUND</div>`;
-}
-window.toggleGloss=i=>{
- const m=metrics[i],existing=$("glossList").querySelectorAll(".glossary-item")[Array.from(metrics.filter(x=>(glossGroup==="all"||x[1]===glossGroup||x[1]==="all")&&x.join(" ").toLowerCase().includes($("glossSearch").value.toLowerCase()))).indexOf(m)];
- if(!existing)return;
- const p=document.createElement("p");p.textContent="評価方法："+m[3];p.style.cssText="padding:10px;background:#f2f4f6;margin-bottom:0";
- const old=existing.querySelector(".extra");if(old){old.remove()}else{p.className="extra";existing.appendChild(p)}
-};
-$("glossSearch").oninput=renderGlossary;
-$("glossTabs").querySelectorAll("button").forEach(b=>b.onclick=()=>{
- $("glossTabs").querySelectorAll("button").forEach(x=>x.classList.remove("active"));b.classList.add("active");glossGroup=b.dataset.group;renderGlossary();
-});
-
-window.openPlayer=name=>{
- const p=[...bat,...pit,...fld].find(x=>x.name===name);
- if(!p)return;
- selectedPlayer=p;
- previousPage=document.querySelector(".page.active").id;
- const type=bat.includes(p)?"BATTER":pit.includes(p)?"PITCHER":"FIELDER";
- const metricKeys=bat.includes(p)?["face","aura","drama","main","clutch","fraud"]:pit.includes(p)?["intimidation","aura","composure","fraud","presence"]:["style","reflex","aura","range","excuse"];
- const primary=metricKeys[0];
- $("playerContent").innerHTML=`
- <div class="pagehead"><div class="eyebrow">PLAYER PROFILE / ${type}</div><h1>${p.name}</h1><p>${p.team} / ${p.pos} / FICTIONAL PLAYER</p></div>
- <div class="profiletop"><div class="profile-meta">NPB FRAUD+ PLAYER INDEX</div><h2>${p.name}</h2><div class="profile-meta">${p.team} / ${p.pos}</div><div class="profile-score">${p[primary].toFixed(1)}<small> ${metricLabels[primary]}</small></div></div>
- <div class="profilegrid"><div><small>${metricLabels[metricKeys[0]]}</small><b>${p[metricKeys[0]].toFixed(1)}</b></div><div><small>${metricLabels[metricKeys[1]]}</small><b>${p[metricKeys[1]].toFixed(1)}</b></div><div><small>${metricLabels[metricKeys[2]]}</small><b>${p[metricKeys[2]].toFixed(1)}</b></div></div>
- <div class="section"><div class="section-head"><div><div class="section-title">PLAYER METRICS</div><div class="section-sub">独自指標一覧</div></div></div><div class="tablewrap"><table><thead><tr><th>METRIC</th><th>VALUE</th></tr></thead><tbody>${metricKeys.map(k=>`<tr><td>${metricLabels[k]}</td><td class="value">${p[k].toFixed(1)}</td></tr>`).join("")}</tbody></table></div></div>`;
- go("player");
- draw("playerRadar",{type:"radar",data:{labels:metricKeys.map(k=>metricLabels[k]),datasets:[{data:metricKeys.map(k=>p[k]),borderColor:"#d92c3b",backgroundColor:"#d92c3b20",pointBackgroundColor:"#d92c3b",borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{r:{beginAtZero:true,suggestedMax:220,ticks:{display:false},grid:{color:"#e4e8eb"},angleLines:{color:"#e4e8eb"},pointLabels:{font:{size:9}}}}}});
- const vals=metricKeys.map(k=>p[k]);
- draw("playerTrend",{type:"line",data:{labels:["MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT"],datasets:[{data:vals.map((v,i)=>v*(.83+i*.025)),borderColor:"#d92c3b",backgroundColor:"#d92c3b18",fill:true,tension:.35,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:"#edf0f2"},border:{display:false}}}}});
-};
-renderOverview();renderBat();renderPit();renderFld();renderGlossary();
+chart('overviewLine',{type:'line',data:{labels:['APR','MAY','JUN','JUL','AUG','SEP','OCT'],datasets:[{data:[61,66,64,73,70,79,78],borderColor:'#e34b4b',backgroundColor:'rgba(227,75,75,.08)',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#e34b4b',borderWidth:2}]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{min:40,max:100,grid}}}});
+chart('overviewBar',{type:'bar',data:{labels:['PITCH','BATT','FIELD'],datasets:[{data:[72.6,76.3,68.9],backgroundColor:['#273d4b','#e34b4b','#8b9b9c'],borderRadius:2,barThickness:24}]},options:{maintainAspectRatio:false,scales:{x:{grid:{display:false}},y:{min:0,max:100,grid}}}});
+chart('pitchScatter',{type:'scatter',data:{datasets:[{data:[{x:22,y:82},{x:31,y:75},{x:45,y:88},{x:51,y:67},{x:58,y:91},{x:64,y:72},{x:70,y:84},{x:78,y:61},{x:83,y:94},{x:91,y:78},{x:37,y:59},{x:48,y:79},{x:68,y:96},{x:75,y:73}],backgroundColor:'#e34b4b',pointRadius:5}]},options:{maintainAspectRatio:false,scales:{x:{title:{display:true,text:'INDEX 01'},min:0,max:100,grid},y:{title:{display:true,text:'INDEX 02'},min:0,max:100,grid}}}});
+chart('battingBar',{type:'bar',data:{labels:['一ノ瀬 律','神崎 玲','桐谷 新','御影 蓮','雨宮 湊','久我 悠','東雲 司','藤堂 玲'],datasets:[{data:[98.1,96.8,93.5,91.4,89.7,87.2,85.6,83.1],backgroundColor:'#e34b4b',borderRadius:2,barThickness:13}]},options:{indexAxis:'y',maintainAspectRatio:false,scales:{x:{min:0,max:100,grid},y:{grid:{display:false}}}}});
+chart('fieldRadar',{type:'radar',data:{labels:['INDEX 01','INDEX 02','INDEX 03','INDEX 04','INDEX 05'],datasets:[{data:[85,72,93,66,88],borderColor:'#e34b4b',backgroundColor:'rgba(227,75,75,.12)',pointBackgroundColor:'#e34b4b',borderWidth:2,pointRadius:3}]},options:{maintainAspectRatio:false,scales:{r:{min:0,max:100,ticks:{display:false,stepSize:25},grid:{color:'#e5e9e8'},angleLines:{color:'#e5e9e8'},pointLabels:{font:{size:9}}}}}});
 </script>
 </body>
 </html>
