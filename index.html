@@ -1,0 +1,193 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#101113">
+<title>NPB FRAUD+ — Baseball Analytics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#101113;--panel:#191a1d;--line:#303135;--red:#ed304b;--white:#f1f0eb;--muted:#85858a;--mono:'DM Mono',monospace;--display:'Barlow Condensed',sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:#08090a;color:var(--white);font-family:'Noto Sans JP',sans-serif}
+#app{max-width:480px;min-height:100dvh;margin:auto;background:var(--bg);padding-bottom:82px;overflow:hidden;position:relative}
+button{font:inherit;color:inherit;cursor:pointer}
+header{height:65px;padding:0 21px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-mark{width:34px;height:34px;background:var(--red);display:grid;place-items:center;font:800 23px var(--display);color:white;transform:skew(-7deg)}
+.brand-name{font:800 21px var(--display);letter-spacing:1px}
+.brand-name span{color:var(--red)}
+.brand-sub{font:8px var(--mono);letter-spacing:1.2px;color:var(--muted)}
+.header-right{font:10px var(--mono);color:var(--muted)}
+.topnav{display:flex;gap:25px;padding:0 21px;overflow:auto;border-bottom:1px solid var(--line);scrollbar-width:none}
+.topnav::-webkit-scrollbar{display:none}
+.topnav button{background:none;border:0;padding:15px 0 13px;white-space:nowrap;font-size:10px;letter-spacing:1px;color:var(--muted);position:relative}
+.topnav button.active{color:var(--white)}
+.topnav button.active:after{content:"";position:absolute;bottom:0;left:0;width:100%;height:2px;background:var(--red)}
+main{padding:0 21px}
+.eyebrow{font:10px var(--mono);letter-spacing:1.8px;color:var(--red)}
+.hero{padding:34px 0 27px;border-bottom:1px solid var(--line);position:relative}
+.hero:after{content:"+";position:absolute;right:3px;top:34px;font:100px var(--display);color:#242529;line-height:1}
+.hero h1{font:900 clamp(65px,18vw,85px)/.82 var(--display);letter-spacing:-2px;margin:19px 0 15px}
+.hero h1 span{color:var(--red)}
+.hero-desc{font-size:11px;line-height:2;color:#a5a5a7;letter-spacing:.2px}
+.season{display:flex;justify-content:space-between;align-items:center;margin-top:25px;font:10px var(--mono);color:var(--muted)}
+.season strong{color:var(--white);font-weight:400}
+.section{padding:25px 0;border-bottom:1px solid var(--line)}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px}
+.section-title{font:700 23px var(--display);letter-spacing:.6px}
+.section-title small{font:9px var(--mono);color:var(--muted);margin-left:7px}
+.more{background:none;border:0;color:var(--red);font:10px var(--mono);letter-spacing:1px}
+.feature{background:var(--panel);padding:19px;position:relative;overflow:hidden}
+.feature:after{content:"F+";position:absolute;right:-7px;bottom:-28px;font:900 115px var(--display);color:#222327}
+.feature-label{font:9px var(--mono);color:var(--red);letter-spacing:1.4px}
+.feature h2{font:800 38px var(--display);margin:13px 0 4px;position:relative;z-index:1}
+.feature p{font-size:10px;color:var(--muted);margin:0}
+.feature-foot{display:flex;justify-content:space-between;align-items:center;margin-top:22px;padding-top:12px;border-top:1px solid var(--line);font:9px var(--mono);color:var(--muted);position:relative;z-index:1}
+.feature-foot b{font-size:10px;color:var(--white);font-weight:400}
+.metrics{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.metric{padding:16px 13px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.metric-label{font:9px var(--mono);color:var(--muted);letter-spacing:1px}
+.metric-value{font:700 35px var(--display);margin:7px 0 2px}
+.metric-value em{font-style:normal;color:var(--red)}
+.metric-note{font-size:9px;color:var(--muted)}
+.data-row{display:flex;align-items:center;padding:13px 0;border-bottom:1px solid var(--line);gap:13px}
+.data-no{font:12px var(--mono);color:var(--red);width:22px}
+.data-info{flex:1;min-width:0}
+.data-name{font-size:12px;font-weight:600}
+.data-meta{font:9px var(--mono);color:var(--muted);margin-top:5px}
+.data-value{text-align:right;font:17px var(--display);color:var(--white)}
+.data-value small{display:block;font:8px var(--mono);color:var(--muted)}
+.disclaimer{padding:20px 0 8px;font:8px/1.8 var(--mono);color:#66676c;letter-spacing:.5px}
+.page-heading{padding:30px 0 22px;border-bottom:1px solid var(--line)}
+.page-heading h1{font:800 48px/.95 var(--display);margin:12px 0}
+.page-heading p{font-size:10px;color:var(--muted);line-height:1.8}
+.search{width:100%;background:#191a1d;border:1px solid var(--line);padding:13px;color:white;font:11px var(--mono);outline:none;margin:18px 0}
+.search:focus{border-color:var(--red)}
+.filters{display:flex;gap:8px;overflow:auto;padding-bottom:15px;scrollbar-width:none}
+.filters button{background:transparent;border:1px solid var(--line);padding:8px 12px;font:9px var(--mono);color:var(--muted);white-space:nowrap}
+.filters button.active{background:var(--red);border-color:var(--red);color:white}
+.table-head{display:flex;justify-content:space-between;padding:12px 0;font:9px var(--mono);color:var(--muted);border-bottom:1px solid var(--line)}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;height:68px;background:#151619;border-top:1px solid var(--line);display:flex;justify-content:space-around;z-index:10;padding-bottom:env(safe-area-inset-bottom)}
+.bottom button{flex:1;border:0;background:none;color:#77777d;font:8px var(--mono);letter-spacing:.4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.bottom button span{font-size:18px;line-height:1}
+.bottom button.active{color:var(--red)}
+.bottom button.active span{transform:translateY(-2px)}
+.empty{padding:35px 0;text-align:center;font:10px var(--mono);color:var(--muted)}
+@media(min-width:481px){body{padding:20px 0}#app{min-height:calc(100dvh - 40px);border:1px solid #292a2d}}
+</style>
+</head>
+<body>
+<div id="app">
+<header>
+ <div class="brand">
+  <div class="brand-mark">F+</div>
+  <div><div class="brand-name">NPB <span>FRAUD+</span></div><div class="brand-sub">INDEPENDENT BASEBALL LAB</div></div>
+ </div>
+ <div class="header-right">VOL. 01 / 2026</div>
+</header>
+<nav class="topnav" id="topnav">
+ <button class="active" data-page="home">HOME</button>
+ <button data-page="players">PLAYERS</button>
+ <button data-page="batting">BATTING</button>
+ <button data-page="pitching">PITCHING</button>
+ <button data-page="teams">TEAMS</button>
+ <button data-page="ranking">RANKINGS</button>
+</nav>
+<main id="content"></main>
+<nav class="bottom">
+ <button class="active" data-page="home"><span>⌂</span>HOME</button>
+ <button data-page="players"><span>♙</span>PLAYERS</button>
+ <button data-page="batting"><span>▥</span>BAT</button>
+ <button data-page="pitching"><span>⌁</span>PITCH</button>
+ <button data-page="ranking"><span>≡</span>RANKING</button>
+</nav>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const players=[
+ {id:"001",name:"PLAYER 001",pos:"OF",team:"TEAM A",bat:"148.6",pitch:"—"},
+ {id:"002",name:"PLAYER 002",pos:"IF",team:"TEAM B",bat:"139.2",pitch:"—"},
+ {id:"003",name:"PLAYER 003",pos:"P",team:"TEAM C",bat:"—",pitch:"162.4"},
+ {id:"004",name:"PLAYER 004",pos:"C",team:"TEAM D",bat:"128.5",pitch:"—"},
+ {id:"005",name:"PLAYER 005",pos:"P",team:"TEAM E",bat:"—",pitch:"151.8"}
+];
+const metric=(label,value,note)=>`<div class="metric"><div class="metric-label">${label}</div><div class="metric-value">${value}</div><div class="metric-note">${note}</div></div>`;
+const row=(p,i,key)=>`<div class="data-row"><div class="data-no">${String(i+1).padStart(2,"0")}</div><div class="data-info"><div class="data-name">${p.name}</div><div class="data-meta">${p.id} / ${p.team} / ${p.pos}</div></div><div class="data-value">${p[key]}<small>${key==="bat"?"FRAUD BAT":"FRAUD PITCH"}</small></div></div>`;
+const heading=(eyebrow,title,desc)=>`<div class="page-heading"><div class="eyebrow">${eyebrow}</div><h1>${title}</h1><p>${desc}</p></div>`;
+function home(){return `
+<div class="hero">
+ <div class="eyebrow">INDEPENDENT BASEBALL ANALYTICS / 2026</div>
+ <h1>THE<br>NUMBERS<br><span>FAKE.</span></h1>
+ <div class="hero-desc">数字を疑え。評価を疑え。<br>野球の新しい見方を、ここから。</div>
+ <div class="season"><strong>2026 SEASON / DATABASE</strong><span>EST. 2026 — F+</span></div>
+</div>
+<section class="section">
+ <div class="section-head"><div class="section-title">FEATURED <small>01 / ANALYSIS</small></div><span class="eyebrow">F+</span></div>
+ <div class="feature">
+  <div class="feature-label">PROPRIETARY METRIC / 001</div>
+  <h2>FRAUD INDEX</h2>
+  <p>独自の評価体系による選手分析</p>
+  <div class="feature-foot"><b>EXPLORE THE METRIC</b><span>↗ &nbsp; 01</span></div>
+ </div>
+</section>
+<section class="section">
+ <div class="section-head"><div class="section-title">DATABASE <small>02 / OVERVIEW</small></div></div>
+ <div class="metrics">
+  ${metric("PLAYER INDEX","480","DEMO RECORDS")}
+  ${metric("BATTING METRICS","12","PROPRIETARY")}
+  ${metric("PITCHING METRICS","14","PROPRIETARY")}
+  ${metric("TEAM INDEX","12","FICTIONAL TEAMS")}
+ </div>
+</section>
+<section class="section">
+ <div class="section-head"><div class="section-title">TOP PLAYERS <small>03 / FRAUD BAT</small></div><button class="more" onclick="go('players')">VIEW ALL ↗</button></div>
+ ${players.filter(p=>p.bat!=="—").slice(0,3).map((p,i)=>row(p,i,"bat")).join("")}
+</section>
+<section class="section">
+ <div class="section-head"><div class="section-title">PITCHING LAB <small>04 / FRAUD PITCH</small></div><button class="more" onclick="go('pitching')">VIEW ALL ↗</button></div>
+ ${players.filter(p=>p.pitch!=="—").map((p,i)=>row(p,i,"pitch")).join("")}
+</section>
+<div class="disclaimer">NPB FRAUD+ / ALL DATA DISPLAYED ON THIS SITE IS FICTIONAL.<br>NOT AFFILIATED WITH NPB OR ANY PROFESSIONAL BASEBALL ORGANIZATION.</div>
+`}
+function listing(type){
+const configs={
+ players:["DATABASE / 01","PLAYER INDEX","選手データベース。架空の選手情報を掲載します。"],
+ batting:["ANALYTICS / 02","BATTING LAB","独自の架空打撃指標による評価。"],
+ pitching:["ANALYTICS / 03","PITCHING LAB","独自の架空投手指標による評価。"],
+ teams:["DATABASE / 04","TEAM INDEX","架空球団のデータベース。"],
+ ranking:["LEADERBOARD / 05","RANKINGS","独自指標によるランキング。"]
+};
+let [ey,title,desc]=configs[type];
+let key=type==="pitching"?"pitch":"bat";
+let list=type==="pitching"?players.filter(p=>p.pitch!=="—"):type==="batting"||type==="ranking"?players.filter(p=>p.bat!=="—"):players;
+if(type==="teams")return heading(ey,title,desc)+`<div class="empty">TEAM DATABASE / COMING SOON</div>`;
+return heading(ey,title,desc)+`<input class="search" id="search" placeholder="⌕  SEARCH PLAYER / ID" autocomplete="off"><div class="filters"><button class="active" data-filter="ALL">ALL</button><button data-filter="P">PITCHER</button><button data-filter="H">HITTER</button></div><div class="table-head"><span>PLAYER / INFORMATION</span><span>INDEX</span></div><div id="list">${list.map((p,i)=>row(p,i,key)).join("")}</div><div class="disclaimer">FICTIONAL DATA / DEMO DATABASE</div>`;
+}
+function render(page){
+$("#content").innerHTML=page==="home"?home():listing(page);
+document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+const search=$("#search");
+if(search)search.addEventListener("input",filter);
+document.querySelectorAll("[data-filter]").forEach(b=>b.addEventListener("click",()=>{
+document.querySelectorAll("[data-filter]").forEach(x=>x.classList.remove("active"));b.classList.add("active");filter();
+}));
+}
+function filter(){
+const q=($("#search")?.value||"").toLowerCase();
+const f=$("[data-filter].active")?.dataset.filter||"ALL";
+const page=location.hash.slice(1)||"home";
+const key=page==="pitching"?"pitch":"bat";
+const list=page==="pitching"?players.filter(p=>p.pitch!=="—"):page==="batting"||page==="ranking"?players.filter(p=>p.bat!=="—"):players;
+const filtered=list.filter(p=>(p.name+" "+p.id+" "+p.team).toLowerCase().includes(q)&&(f==="ALL"||(f==="P"?p.pos==="P":p.pos!=="P")));
+$("#list").innerHTML=filtered.length?filtered.map((p,i)=>row(p,i,key)).join(""):'<div class="empty">NO RESULTS FOUND</div>';
+}
+function go(page){location.hash=page;render(page)}
+document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.page)));
+window.addEventListener("hashchange",()=>render(location.hash.slice(1)||"home"));
+render(location.hash.slice(1)||"home");
+</script>
+</body>
+</html>
