@@ -4,297 +4,357 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#101820">
-<title>NPB FRAUD+ — Baseball Intelligence</title>
+<meta name="theme-color" content="#f4f4f1">
+<title>NPB FRAUD+ | Baseball Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23101820'/%3E%3Cpath d='M15 12h34L35 30h14L20 53l9-18H15l14-23z' fill='%23e34b4b'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23171b1e'/%3E%3Cpath d='M13 12h38L37 29h14L14 54l12-20H13l16-22z' fill='%23d83b3b'/%3E%3C/svg%3E">
 <style>
-:root{--bg:#f2f3f2;--paper:#fff;--ink:#101820;--muted:#78818a;--line:#dfe3e4;--red:#e34b4b;--dark:#101820;--green:#a5c9b7}
+:root{--bg:#f4f4f1;--white:#fff;--ink:#171b1e;--muted:#858b8d;--line:#d9dcda;--red:#d83b3b;--soft:#e9eae6;--mono:'DM Mono',monospace;--display:'Barlow Condensed',sans-serif}
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,sans-serif;-webkit-font-smoothing:antialiased}
 button{font:inherit}
-.topbar{height:70px;background:var(--dark);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:sticky;top:0;z-index:20}
-.brand{display:flex;align-items:center;gap:11px;color:#fff;text-decoration:none}
-.brand-mark{width:36px;height:36px}
-.brand-name{font:800 23px/1 'Barlow Condensed',sans-serif;letter-spacing:.7px}
-.brand-name span{color:var(--red)}
-.brand-sub{font:9px 'DM Mono',monospace;letter-spacing:1.6px;color:#9ca6ad;margin-top:4px}
-.menu-button{width:42px;height:42px;border:1px solid #39434b;background:transparent;display:grid;place-content:center;gap:5px;cursor:pointer}
-.menu-button span{display:block;width:19px;height:2px;background:#fff;transition:.2s}
-.menu-button.active span:first-child{transform:translateY(7px) rotate(45deg)}
-.menu-button.active span:nth-child(2){opacity:0}
-.menu-button.active span:last-child{transform:translateY(-7px) rotate(-45deg)}
-.menu{display:none;position:absolute;right:14px;top:62px;width:230px;background:#17232d;color:#fff;padding:10px;box-shadow:0 16px 35px #0004;border:1px solid #35414a}
-.menu.open{display:block}
-.menu-head{font:10px 'DM Mono';letter-spacing:1.5px;color:#82909b;padding:12px 12px 14px;border-bottom:1px solid #35414a}
-.menu button{width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 12px;border:0;background:none;color:#dce1e4;text-align:left;font-size:13px;cursor:pointer}
-.menu button:after{content:'↗';color:#73818c}
-.menu button.active,.menu button:hover{background:#263640;color:#fff}
-.menu button.active:before{content:'';width:3px;height:17px;background:var(--red);position:absolute;left:10px}
-main{max-width:1100px;margin:auto;padding:28px 20px 70px}
-.eyebrow{font:10px 'DM Mono',monospace;letter-spacing:1.7px;color:var(--muted);text-transform:uppercase}
-.page-head{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--line);padding:5px 0 20px;margin-bottom:22px}
-h1{font:800 42px/.95 'Barlow Condensed',sans-serif;letter-spacing:.3px;margin:9px 0 0;text-transform:uppercase}
-.page-desc{font-size:11px;color:var(--muted);margin-top:8px}
-.season{font:11px 'DM Mono';color:var(--muted);text-align:right}
-.season strong{display:block;color:var(--ink);font-size:16px;margin-top:4px}
-.section-label{display:flex;align-items:center;gap:10px;margin:27px 0 12px}
-.section-label b{font:700 17px 'Barlow Condensed';letter-spacing:.7px;text-transform:uppercase}
-.section-label span{font:9px 'DM Mono';color:var(--muted);letter-spacing:1px}
-.section-label:after{content:'';height:1px;background:var(--line);flex:1}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
-.stat{background:var(--paper);padding:17px 16px;min-height:102px}
-.stat-label{font:9px 'DM Mono';color:var(--muted);letter-spacing:1px}
-.stat-value{font:700 31px/.95 'Barlow Condensed';margin-top:11px}
-.stat-note{font-size:10px;color:var(--muted);margin-top:6px}
-.stat-value em{font:10px 'DM Mono';font-style:normal;color:var(--red);margin-left:5px}
-.panel{background:var(--paper);border:1px solid var(--line);padding:17px;margin-bottom:12px}
-.panel-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px}
-.panel-title{font-size:12px;font-weight:700}
-.panel-meta{font:9px 'DM Mono';color:var(--muted)}
-.chart-wrap{height:220px;position:relative}
-.chart-wrap.tall{height:270px}
-.split{display:grid;grid-template-columns:1fr;gap:12px}
-.table-wrap{overflow-x:auto;background:var(--paper);border:1px solid var(--line)}
+a{color:inherit;text-decoration:none}
+.top{height:72px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:var(--bg);position:sticky;top:0;z-index:30}
+.brand{display:flex;align-items:center;gap:10px}
+.mark{width:37px;height:37px}
+.brand-main{font:900 23px/.85 var(--display);letter-spacing:.3px}
+.brand-main span{color:var(--red)}
+.brand-caption{font:8px var(--mono);letter-spacing:1.8px;color:var(--muted);margin-top:6px}
+.menu-btn{width:42px;height:42px;background:transparent;border:1px solid var(--ink);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;cursor:pointer}
+.menu-btn i{width:17px;height:1.5px;background:var(--ink);transition:.2s}
+.menu-btn.open i:first-child{transform:translateY(3.25px) rotate(45deg)}
+.menu-btn.open i:last-child{transform:translateY(-3.25px) rotate(-45deg)}
+.menu{position:fixed;z-index:29;top:72px;right:0;width:min(330px,100%);background:#171b1e;color:#fff;padding:25px 24px 32px;transform:translateY(-10px);opacity:0;visibility:hidden;transition:.22s}
+.menu.open{transform:none;opacity:1;visibility:visible}
+.menu small{font:10px var(--mono);letter-spacing:2px;color:#858b8d}
+.menu a{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #343a3d;padding:19px 0;font:700 28px var(--display);letter-spacing:.5px}
+.menu a:after{content:'↗';font:16px var(--mono);color:var(--red)}
+.menu a.current{color:#e35a5a}
+.menu-foot{font:9px var(--mono);color:#747d80;margin-top:25px;letter-spacing:1px}
+main{max-width:1120px;margin:auto;padding:0 22px 75px}
+.topline{display:flex;justify-content:space-between;align-items:center;padding:17px 0;border-bottom:1px solid var(--ink);font:9px var(--mono);letter-spacing:1px;color:var(--muted)}
+.topline strong{color:var(--red);font-weight:500}
+.page{display:none}
+.page.active{display:block}
+.hero{padding:35px 0 25px;border-bottom:1px solid var(--ink)}
+.kicker{font:10px var(--mono);letter-spacing:1.8px;color:var(--red)}
+.hero h1{font:900 clamp(57px,15vw,100px)/.82 var(--display);letter-spacing:-1px;margin:16px 0 13px;text-transform:uppercase}
+.hero-bottom{display:flex;justify-content:space-between;align-items:end;gap:15px}
+.hero-desc{font-size:11px;color:#737a7b;line-height:1.8}
+.hero-year{text-align:right;font:10px var(--mono);color:var(--muted);white-space:nowrap}
+.hero-year b{display:block;font:700 23px var(--display);color:var(--ink)}
+.section-head{display:flex;align-items:center;gap:12px;margin:35px 0 14px}
+.section-head .num{font:11px var(--mono);color:var(--red)}
+.section-head h2{font:700 21px var(--display);text-transform:uppercase;letter-spacing:.6px;margin:0}
+.section-head .rule{height:1px;background:var(--line);flex:1}
+.section-head small{font:9px var(--mono);color:var(--muted)}
+.lead-grid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.lead-stat{padding:18px 14px 20px 0;min-height:125px;border-bottom:1px solid var(--line)}
+.lead-stat:nth-child(odd){border-right:1px solid var(--line)}
+.lead-stat:nth-child(even){padding-left:15px}
+.lead-stat:nth-last-child(-n+2){border-bottom:0}
+.stat-label{font:9px var(--mono);letter-spacing:1px;color:var(--muted)}
+.stat-number{font:800 48px/.95 var(--display);margin-top:12px;letter-spacing:-1px}
+.stat-number.red{color:var(--red)}
+.stat-foot{font-size:9px;color:var(--muted);margin-top:8px}
+.feature{margin-top:24px;background:var(--ink);color:white;padding:21px 19px 18px}
+.feature-top{display:flex;justify-content:space-between;align-items:center}
+.feature-label{font:9px var(--mono);letter-spacing:1.5px;color:#a4acad}
+.feature-tag{font:9px var(--mono);color:#ed7777}
+.feature-main{display:flex;justify-content:space-between;align-items:end;margin-top:27px;gap:10px}
+.feature-name{font:700 27px var(--display)}
+.feature-team{font:9px var(--mono);color:#a4acad;margin-top:5px}
+.feature-value{font:800 57px/.8 var(--display);color:#fff}
+.feature-value span{font:10px var(--mono);color:#ed7777}
+.feature-bottom{border-top:1px solid #41484b;margin-top:21px;padding-top:12px;display:flex;justify-content:space-between;font:9px var(--mono);color:#a4acad}
+.chart-panel{background:var(--white);border-top:1px solid var(--ink);padding:17px 14px 13px}
+.chart-title{font-size:11px;font-weight:700}
+.chart-sub{font:9px var(--mono);color:var(--muted);margin-top:5px}
+.chart-area{height:230px;margin-top:17px;position:relative}
+.chart-area.large{height:275px}
+.chart-foot{border-top:1px solid var(--line);padding-top:11px;margin-top:12px;display:flex;justify-content:space-between;font:9px var(--mono);color:var(--muted)}
+.dual{display:grid;grid-template-columns:1fr;gap:20px}
+.table-box{border-top:1px solid var(--ink);background:var(--white);overflow:hidden}
+.table-heading{padding:16px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}
+.table-heading b{font-size:11px}
+.table-heading span{font:9px var(--mono);color:var(--muted)}
 table{width:100%;border-collapse:collapse;white-space:nowrap}
-th{font:9px 'DM Mono';letter-spacing:.7px;color:var(--muted);text-align:left;padding:12px 13px;background:#f7f8f7;border-bottom:1px solid var(--line)}
-td{font-size:11px;padding:14px 13px;border-bottom:1px solid #edf0ef}
-tr:last-child td{border-bottom:0}
-td.num{font:12px 'DM Mono';font-weight:500}
-td.rank{font:700 17px 'Barlow Condensed';color:#a3abb0}
-td.player{font-weight:700}
-.tag{display:inline-block;font:9px 'DM Mono';padding:4px 6px;background:#f3e9e9;color:#b74646}
-.bar-cell{min-width:100px}
-.mini-bar{height:4px;background:#eceeee;margin-top:6px}
-.mini-bar i{height:4px;display:block;background:var(--red)}
-.note{font-size:10px;color:var(--muted);line-height:1.8;margin:12px 0}
-.view{display:none}
-.view.active{display:block}
-.glossary-row{padding:16px 0;border-bottom:1px solid var(--line)}
-.glossary-row:last-child{border:0}
-.glossary-code{font:10px 'DM Mono';color:var(--red);letter-spacing:1px}
-.glossary-name{font:700 17px 'Barlow Condensed';margin:5px 0}
-.glossary-desc{font-size:11px;line-height:1.7;color:var(--muted)}
-.footer{background:var(--dark);color:#89949d;padding:25px 22px;font:9px 'DM Mono';letter-spacing:1px}
-.footer-inner{max-width:1100px;margin:auto;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.disclaimer{color:#a3abb0;line-height:1.7;margin-top:8px;letter-spacing:0}
-.accent{color:var(--red)}
-@media(min-width:650px){
-main{padding-top:42px}
-h1{font-size:54px}
-.stats{grid-template-columns:repeat(4,1fr)}
-.split{grid-template-columns:1fr 1fr}
-.stat{padding:20px}
-.chart-wrap{height:250px}
+th{background:#f0f1ee;color:var(--muted);font:9px var(--mono);text-align:left;padding:12px 11px}
+td{padding:13px 11px;border-top:1px solid #e9ebe8;font-size:10px}
+td.rank{font:700 18px var(--display);color:#a1a7a6}
+td.name{font-weight:700}
+td.value{font:12px var(--mono)}
+td.best{color:var(--red);font-weight:500}
+.table-scroll{overflow-x:auto}
+.table-note{padding:12px 14px;font:9px var(--mono);color:var(--muted);border-top:1px solid var(--line)}
+.bar-list{background:#fff;border-top:1px solid var(--ink);padding:5px 15px}
+.bar-row{display:grid;grid-template-columns:85px 1fr 38px;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid var(--line)}
+.bar-row:last-child{border:0}
+.bar-name{font-size:10px;font-weight:600}
+.bar-track{height:5px;background:#eceeeb}
+.bar-track i{height:100%;display:block;background:var(--red)}
+.bar-val{text-align:right;font:11px var(--mono)}
+.intro-copy{font-size:11px;line-height:2;color:#687174;margin:14px 0 24px}
+.glossary{border-top:1px solid var(--ink);background:#fff}
+.glossary-item{padding:17px 15px;border-bottom:1px solid var(--line)}
+.glossary-meta{display:flex;justify-content:space-between;font:9px var(--mono);color:var(--red)}
+.glossary-name{font:700 23px var(--display);margin:8px 0 5px}
+.glossary-desc{font-size:10px;color:var(--muted);line-height:1.8}
+.footer{background:#171b1e;color:#a2aaab;padding:26px 22px}
+.footer-inner{max-width:1120px;margin:auto}
+.footer-brand{font:900 24px var(--display);color:#fff}
+.footer-brand span{color:var(--red)}
+.footer-line{height:1px;background:#3b4244;margin:17px 0}
+.footer-bottom{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font:9px var(--mono);letter-spacing:.7px}
+.footer-note{font-size:9px;color:#7e888a;line-height:1.8;margin-top:13px}
+@media(min-width:700px){
+ main{padding-left:32px;padding-right:32px}
+ .lead-grid{grid-template-columns:repeat(4,1fr)}
+ .lead-stat{padding:20px 16px!important;border-bottom:0!important;border-right:1px solid var(--line)}
+ .lead-stat:last-child{border-right:0}
+ .stat-number{font-size:57px}
+ .dual{grid-template-columns:1fr 1fr;gap:15px}
+ .feature{padding:27px}
+ .chart-area{height:260px}
 }
 </style>
 </head>
 <body>
-<header class="topbar">
-<a class="brand" href="#" aria-label="NPB Fraud Plus">
-<svg class="brand-mark" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-<path d="M9 8H55L36 28H54L13 57L25 35H9L28 8H9Z" fill="#E34B4B"/>
-<path d="M28 8H55L36 28" stroke="#fff" stroke-width="1.5" opacity=".65"/>
+<header class="top">
+<a class="brand" href="#" onclick="navigate('overview');return false">
+<svg class="mark" viewBox="0 0 64 64" aria-label="NPB Fraud Plus">
+<path d="M7 7H57L39 27H55L9 58L24 35H7L27 7H7Z" fill="#d83b3b"/>
+<path d="M27 7H57L39 27" fill="none" stroke="#171b1e" stroke-width="1.5"/>
+<path d="M36 42h13M42.5 35.5v13" stroke="#fff" stroke-width="2"/>
 </svg>
-<div>
-<div class="brand-name">NPB FRAUD<span>+</span></div>
-<div class="brand-sub">BASEBALL INTELLIGENCE</div>
-</div>
+<div><div class="brand-main">NPB FRAUD<span>+</span></div><div class="brand-caption">BASEBALL INTELLIGENCE</div></div>
 </a>
-<button class="menu-button" id="menuButton" aria-label="メニューを開く" aria-expanded="false">
-<span></span><span></span><span></span>
-</button>
-<nav class="menu" id="menu">
-<div class="menu-head">NAVIGATION / 2026</div>
-<button class="active" data-page="overview">Overview</button>
-<button data-page="pitching">Pitching</button>
-<button data-page="batting">Batting</button>
-<button data-page="fielding">Fielding</button>
-<button data-page="glossary">Glossary</button>
-</nav>
+<button class="menu-btn" id="menuBtn" aria-label="メニュー" aria-expanded="false"><i></i><i></i></button>
 </header>
 
+<nav class="menu" id="menu">
+<small>EXPLORE THE DATABASE</small>
+<a href="#overview" data-page="overview" class="current">Overview</a>
+<a href="#pitching" data-page="pitching">Pitching</a>
+<a href="#batting" data-page="batting">Batting</a>
+<a href="#fielding" data-page="fielding">Fielding</a>
+<a href="#glossary" data-page="glossary">Glossary</a>
+<div class="menu-foot">NPB FRAUD+ / SEASON 2026</div>
+</nav>
+
 <main>
-<section class="view active" id="overview">
-<div class="page-head">
-<div><div class="eyebrow">League dashboard / 2026</div><h1>Overview</h1><div class="page-desc">リーグ全体のデータ概況</div></div>
-<div class="season">SEASON<strong>2026</strong></div>
-</div>
-<div class="stats">
-<div class="stat"><div class="stat-label">LEAGUE INDEX</div><div class="stat-value">78.4</div><div class="stat-note">リーグ総合値</div></div>
-<div class="stat"><div class="stat-label">TOP RATING</div><div class="stat-value">96.8</div><div class="stat-note">最高評価値</div></div>
-<div class="stat"><div class="stat-label">PLAYERS</div><div class="stat-value">428</div><div class="stat-note">登録対象選手</div></div>
-<div class="stat"><div class="stat-label">DATA POINTS</div><div class="stat-value">12.8K</div><div class="stat-note">集計データ数</div></div>
-</div>
-<div class="section-label"><b>League trends</b><span>01 / DISTRIBUTION</span></div>
-<div class="panel">
-<div class="panel-top"><div class="panel-title">リーグ指標の推移</div><div class="panel-meta">MONTHLY · 2026</div></div>
-<div class="chart-wrap"><canvas id="overviewLine"></canvas></div>
-</div>
-<div class="split">
-<div class="panel">
-<div class="panel-top"><div class="panel-title">カテゴリー別平均値</div><div class="panel-meta">INDEX</div></div>
-<div class="chart-wrap"><canvas id="overviewBar"></canvas></div>
-</div>
-<div class="panel">
-<div class="panel-top"><div class="panel-title">上位選手ランキング</div><div class="panel-meta">TOP 5</div></div>
-<table>
-<thead><tr><th>RANK</th><th>PLAYER</th><th>TEAM</th><th>VALUE</th></tr></thead>
-<tbody>
-<tr><td class="rank">01</td><td class="player">神崎 玲</td><td>TKY</td><td class="num">96.8</td></tr>
-<tr><td class="rank">02</td><td class="player">御影 蓮</td><td>OSK</td><td class="num">94.2</td></tr>
-<tr><td class="rank">03</td><td class="player">東雲 司</td><td>NAG</td><td class="num">91.7</td></tr>
-<tr><td class="rank">04</td><td class="player">雨宮 湊</td><td>FUK</td><td class="num">89.3</td></tr>
-<tr><td class="rank">05</td><td class="player">久我 悠</td><td>SEN</td><td class="num">87.9</td></tr>
-</tbody>
-</table>
-</div>
-</div>
-<p class="note">※ 掲載されている選手・球団・数値はすべて架空のデータです。</p>
-</section>
+<div class="topline"><span><strong>●</strong> DATABASE ONLINE</span><span>FICTIONAL LEAGUE <b> / 2026</b></span></div>
 
-<section class="view" id="pitching">
-<div class="page-head"><div><div class="eyebrow">Pitching department / 2026</div><h1>Pitching</h1><div class="page-desc">投手部門の分析データ</div></div><div class="season">SEASON<strong>2026</strong></div></div>
-<div class="stats">
-<div class="stat"><div class="stat-label">AVG. INDEX</div><div class="stat-value">72.6</div><div class="stat-note">部門平均</div></div>
-<div class="stat"><div class="stat-label">BEST INDEX</div><div class="stat-value">96.8</div><div class="stat-note">最高値</div></div>
-<div class="stat"><div class="stat-label">STARTERS</div><div class="stat-value">86</div><div class="stat-note">対象選手</div></div>
-<div class="stat"><div class="stat-label">RELIEVERS</div><div class="stat-value">74</div><div class="stat-note">対象選手</div></div>
+<section class="page active" id="overview">
+<div class="hero">
+<div class="kicker">01 — LEAGUE REPORT</div>
+<h1>Overview</h1>
+<div class="hero-bottom"><div class="hero-desc">リーグ全体のデータを俯瞰する。<br>2026 SEASON / STATISTICAL OVERVIEW</div><div class="hero-year">CURRENT SEASON<b>2026</b></div></div>
 </div>
-<div class="section-label"><b>Pitching analysis</b><span>02 / DATA</span></div>
-<div class="panel"><div class="panel-top"><div class="panel-title">選手別分布</div><div class="panel-meta">INDEX 01 × INDEX 02</div></div><div class="chart-wrap tall"><canvas id="pitchScatter"></canvas></div></div>
-<div class="panel"><div class="panel-top"><div class="panel-title">ランキング</div><div class="panel-meta">TOP 5</div></div>
-<table><thead><tr><th>RANK</th><th>PLAYER</th><th>TEAM</th><th>VALUE</th></tr></thead><tbody>
-<tr><td class="rank">01</td><td class="player">神崎 玲</td><td>TKY</td><td class="num">96.8</td></tr>
-<tr><td class="rank">02</td><td class="player">御影 蓮</td><td>OSK</td><td class="num">94.2</td></tr>
-<tr><td class="rank">03</td><td class="player">東雲 司</td><td>NAG</td><td class="num">91.7</td></tr>
-<tr><td class="rank">04</td><td class="player">雨宮 湊</td><td>FUK</td><td class="num">89.3</td></tr>
-<tr><td class="rank">05</td><td class="player">久我 悠</td><td>SEN</td><td class="num">87.9</td></tr>
+
+<div class="section-head"><span class="num">01</span><h2>League at a glance</h2><div class="rule"></div><small>SUMMARY</small></div>
+<div class="lead-grid">
+<div class="lead-stat"><div class="stat-label">LEAGUE INDEX</div><div class="stat-number">78.4</div><div class="stat-foot">リーグ総合評価</div></div>
+<div class="lead-stat"><div class="stat-label">TOP SCORE</div><div class="stat-number red">98.1</div><div class="stat-foot">最高評価値</div></div>
+<div class="lead-stat"><div class="stat-label">PLAYERS</div><div class="stat-number">428</div><div class="stat-foot">登録対象選手</div></div>
+<div class="lead-stat"><div class="stat-label">INDEX COUNT</div><div class="stat-number">12</div><div class="stat-foot">掲載評価項目</div></div>
+</div>
+
+<div class="feature">
+<div class="feature-top"><div class="feature-label">FEATURED PLAYER / 2026</div><div class="feature-tag">NO. 001</div></div>
+<div class="feature-main"><div><div class="feature-name">一ノ瀬 律</div><div class="feature-team">OSK / BATTER</div></div><div class="feature-value">98.1<span> PTS</span></div></div>
+<div class="feature-bottom"><span>OVERALL RANKING</span><span>01 / 428</span></div>
+</div>
+
+<div class="section-head"><span class="num">02</span><h2>League distribution</h2><div class="rule"></div><small>CHART</small></div>
+<div class="chart-panel">
+<div class="chart-title">評価値の分布</div><div class="chart-sub">ALL PLAYERS / INDEX 01</div>
+<div class="chart-area large"><canvas id="distChart"></canvas></div>
+<div class="chart-foot"><span>LOW ← SCORE → HIGH</span><span>N = 428</span></div>
+</div>
+
+<div class="section-head"><span class="num">03</span><h2>Department report</h2><div class="rule"></div><small>COMPARISON</small></div>
+<div class="dual">
+<div class="chart-panel">
+<div class="chart-title">部門別平均値</div><div class="chart-sub">DEPARTMENT AVERAGE</div>
+<div class="chart-area"><canvas id="deptChart"></canvas></div>
+</div>
+<div class="table-box">
+<div class="table-heading"><b>TOP PERFORMERS</b><span>TOP 5</span></div>
+<div class="table-scroll"><table><thead><tr><th>RK</th><th>PLAYER</th><th>TEAM</th><th>VALUE</th></tr></thead><tbody>
+<tr><td class="rank">01</td><td class="name">一ノ瀬 律</td><td>OSK</td><td class="value best">98.1</td></tr>
+<tr><td class="rank">02</td><td class="name">神崎 玲</td><td>TKY</td><td class="value">96.8</td></tr>
+<tr><td class="rank">03</td><td class="name">東雲 司</td><td>NAG</td><td class="value">95.4</td></tr>
+<tr><td class="rank">04</td><td class="name">御影 蓮</td><td>OSK</td><td class="value">94.2</td></tr>
+<tr><td class="rank">05</td><td class="name">桐谷 新</td><td>NAG</td><td class="value">93.5</td></tr>
 </tbody></table></div>
+<div class="table-note">FICTIONAL DATA / 2026</div>
+</div>
+</div>
 </section>
 
-<section class="view" id="batting">
-<div class="page-head"><div><div class="eyebrow">Batting department / 2026</div><h1>Batting</h1><div class="page-desc">打撃部門の分析データ</div></div><div class="season">SEASON<strong>2026</strong></div></div>
-<div class="stats">
-<div class="stat"><div class="stat-label">AVG. INDEX</div><div class="stat-value">76.3</div><div class="stat-note">部門平均</div></div>
-<div class="stat"><div class="stat-label">BEST INDEX</div><div class="stat-value">98.1</div><div class="stat-note">最高値</div></div>
-<div class="stat"><div class="stat-label">BATTERS</div><div class="stat-value">214</div><div class="stat-note">対象選手</div></div>
-<div class="stat"><div class="stat-label">TOP 10 AVG.</div><div class="stat-value">91.2</div><div class="stat-note">上位10名平均</div></div>
+<section class="page" id="pitching">
+<div class="hero"><div class="kicker">02 — PITCHING REPORT</div><h1>Pitching</h1><div class="hero-bottom"><div class="hero-desc">投手部門の評価・比較データ。<br>PITCHING DEPARTMENT / 2026</div><div class="hero-year">SEASON<b>2026</b></div></div></div>
+<div class="section-head"><span class="num">01</span><h2>Department overview</h2><div class="rule"></div><small>SUMMARY</small></div>
+<div class="lead-grid">
+<div class="lead-stat"><div class="stat-label">AVG. SCORE</div><div class="stat-number">72.6</div><div class="stat-foot">部門平均</div></div>
+<div class="lead-stat"><div class="stat-label">BEST SCORE</div><div class="stat-number red">96.8</div><div class="stat-foot">最高評価</div></div>
+<div class="lead-stat"><div class="stat-label">PLAYERS</div><div class="stat-number">160</div><div class="stat-foot">対象選手</div></div>
+<div class="lead-stat"><div class="stat-label">TOP 10 AVG.</div><div class="stat-number">89.4</div><div class="stat-foot">上位10名平均</div></div>
 </div>
-<div class="section-label"><b>Batting analysis</b><span>03 / DATA</span></div>
-<div class="panel"><div class="panel-top"><div class="panel-title">上位選手の比較</div><div class="panel-meta">TOP 8</div></div><div class="chart-wrap tall"><canvas id="battingBar"></canvas></div></div>
-<div class="panel"><div class="panel-top"><div class="panel-title">ランキング</div><div class="panel-meta">TOP 5</div></div>
-<table><thead><tr><th>RANK</th><th>PLAYER</th><th>TEAM</th><th>VALUE</th></tr></thead><tbody>
-<tr><td class="rank">01</td><td class="player">一ノ瀬 律</td><td>OSK</td><td class="num">98.1</td></tr>
-<tr><td class="rank">02</td><td class="player">神崎 玲</td><td>TKY</td><td class="num">96.8</td></tr>
-<tr><td class="rank">03</td><td class="player">桐谷 新</td><td>NAG</td><td class="num">93.5</td></tr>
-<tr><td class="rank">04</td><td class="player">御影 蓮</td><td>OSK</td><td class="num">91.4</td></tr>
-<tr><td class="rank">05</td><td class="player">雨宮 湊</td><td>FUK</td><td class="num">89.7</td></tr>
-</tbody></table></div>
+<div class="section-head"><span class="num">02</span><h2>Player map</h2><div class="rule"></div><small>DISTRIBUTION</small></div>
+<div class="chart-panel"><div class="chart-title">選手別評価分布</div><div class="chart-sub">INDEX 01 × INDEX 02</div><div class="chart-area large"><canvas id="pitchScatter"></canvas></div><div class="chart-foot"><span>INDEX 01</span><span>INDEX 02</span></div></div>
+<div class="section-head"><span class="num">03</span><h2>Leaderboard</h2><div class="rule"></div><small>TOP 10</small></div>
+<div class="table-box"><div class="table-heading"><b>PITCHING RANKINGS</b><span>2026 SEASON</span></div><div class="table-scroll"><table><thead><tr><th>RK</th><th>PLAYER</th><th>TEAM</th><th>ROLE</th><th>VALUE</th></tr></thead><tbody>
+<tr><td class="rank">01</td><td class="name">神崎 玲</td><td>TKY</td><td>SP</td><td class="value best">96.8</td></tr>
+<tr><td class="rank">02</td><td class="name">御影 蓮</td><td>OSK</td><td>SP</td><td class="value">94.2</td></tr>
+<tr><td class="rank">03</td><td class="name">雨宮 湊</td><td>FUK</td><td>SP</td><td class="value">89.3</td></tr>
+<tr><td class="rank">04</td><td class="name">久我 悠</td><td>SEN</td><td>RP</td><td class="value">87.9</td></tr>
+<tr><td class="rank">05</td><td class="name">瀬名 颯</td><td>NAG</td><td>SP</td><td class="value">86.1</td></tr>
+</tbody></table></div><div class="table-note">ALL PLAYERS AND RECORDS ARE FICTIONAL.</div></div>
 </section>
 
-<section class="view" id="fielding">
-<div class="page-head"><div><div class="eyebrow">Fielding department / 2026</div><h1>Fielding</h1><div class="page-desc">守備部門の分析データ</div></div><div class="season">SEASON<strong>2026</strong></div></div>
-<div class="stats">
-<div class="stat"><div class="stat-label">AVG. INDEX</div><div class="stat-value">68.9</div><div class="stat-note">部門平均</div></div>
-<div class="stat"><div class="stat-label">BEST INDEX</div><div class="stat-value">95.4</div><div class="stat-note">最高値</div></div>
-<div class="stat"><div class="stat-label">FIELDERS</div><div class="stat-value">198</div><div class="stat-note">対象選手</div></div>
-<div class="stat"><div class="stat-label">DATA POINTS</div><div class="stat-value">4.2K</div><div class="stat-note">集計データ数</div></div>
+<section class="page" id="batting">
+<div class="hero"><div class="kicker">03 — BATTING REPORT</div><h1>Batting</h1><div class="hero-bottom"><div class="hero-desc">打撃部門の評価・比較データ。<br>BATTING DEPARTMENT / 2026</div><div class="hero-year">SEASON<b>2026</b></div></div></div>
+<div class="section-head"><span class="num">01</span><h2>Department overview</h2><div class="rule"></div><small>SUMMARY</small></div>
+<div class="lead-grid">
+<div class="lead-stat"><div class="stat-label">AVG. SCORE</div><div class="stat-number">76.3</div><div class="stat-foot">部門平均</div></div>
+<div class="lead-stat"><div class="stat-label">BEST SCORE</div><div class="stat-number red">98.1</div><div class="stat-foot">最高評価</div></div>
+<div class="lead-stat"><div class="stat-label">PLAYERS</div><div class="stat-number">214</div><div class="stat-foot">対象選手</div></div>
+<div class="lead-stat"><div class="stat-label">TOP 10 AVG.</div><div class="stat-number">91.2</div><div class="stat-foot">上位10名平均</div></div>
 </div>
-<div class="section-label"><b>Fielding analysis</b><span>04 / DATA</span></div>
-<div class="panel"><div class="panel-top"><div class="panel-title">カテゴリー別評価</div><div class="panel-meta">INDEX</div></div><div class="chart-wrap tall"><canvas id="fieldRadar"></canvas></div></div>
-<div class="panel"><div class="panel-top"><div class="panel-title">ランキング</div><div class="panel-meta">TOP 5</div></div>
-<table><thead><tr><th>RANK</th><th>PLAYER</th><th>TEAM</th><th>VALUE</th></tr></thead><tbody>
-<tr><td class="rank">01</td><td class="player">東雲 司</td><td>NAG</td><td class="num">95.4</td></tr>
-<tr><td class="rank">02</td><td class="player">久我 悠</td><td>SEN</td><td class="num">92.8</td></tr>
-<tr><td class="rank">03</td><td class="player">神崎 玲</td><td>TKY</td><td class="num">90.6</td></tr>
-<tr><td class="rank">04</td><td class="player">一ノ瀬 律</td><td>OSK</td><td class="num">88.1</td></tr>
-<tr><td class="rank">05</td><td class="player">桐谷 新</td><td>NAG</td><td class="num">86.7</td></tr>
-</tbody></table></div>
+<div class="section-head"><span class="num">02</span><h2>Player comparison</h2><div class="rule"></div><small>TOP 8</small></div>
+<div class="chart-panel"><div class="chart-title">上位選手の評価比較</div><div class="chart-sub">PLAYER INDEX / 2026</div><div class="chart-area large"><canvas id="batChart"></canvas></div></div>
+<div class="section-head"><span class="num">03</span><h2>Leaderboard</h2><div class="rule"></div><small>TOP 10</small></div>
+<div class="table-box"><div class="table-heading"><b>BATTING RANKINGS</b><span>2026 SEASON</span></div><div class="table-scroll"><table><thead><tr><th>RK</th><th>PLAYER</th><th>TEAM</th><th>VALUE</th></tr></thead><tbody>
+<tr><td class="rank">01</td><td class="name">一ノ瀬 律</td><td>OSK</td><td class="value best">98.1</td></tr>
+<tr><td class="rank">02</td><td class="name">神崎 玲</td><td>TKY</td><td class="value">96.8</td></tr>
+<tr><td class="rank">03</td><td class="name">桐谷 新</td><td>NAG</td><td class="value">93.5</td></tr>
+<tr><td class="rank">04</td><td class="name">御影 蓮</td><td>OSK</td><td class="value">91.4</td></tr>
+<tr><td class="rank">05</td><td class="name">雨宮 湊</td><td>FUK</td><td class="value">89.7</td></tr>
+</tbody></table></div><div class="table-note">ALL PLAYERS AND RECORDS ARE FICTIONAL.</div></div>
 </section>
 
-<section class="view" id="glossary">
-<div class="page-head"><div><div class="eyebrow">Index dictionary / 2026</div><h1>Glossary</h1><div class="page-desc">指標・評価項目の一覧</div></div><div class="season">TOTAL<strong>12 ITEMS</strong></div></div>
-<div class="section-label"><b>Index directory</b><span>05 / REFERENCE</span></div>
-<div class="panel">
-<div class="eyebrow">PITCHING / 04 ITEMS</div>
-<div class="glossary-row"><div class="glossary-code">PITCH-01</div><div class="glossary-name">METRIC 01</div><div class="glossary-desc">投手部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
-<div class="glossary-row"><div class="glossary-code">PITCH-02</div><div class="glossary-name">METRIC 02</div><div class="glossary-desc">投手部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
-<div class="glossary-row"><div class="glossary-code">PITCH-03</div><div class="glossary-name">METRIC 03</div><div class="glossary-desc">投手部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
-<div class="glossary-row"><div class="glossary-code">PITCH-04</div><div class="glossary-name">METRIC 04</div><div class="glossary-desc">投手部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
+<section class="page" id="fielding">
+<div class="hero"><div class="kicker">04 — FIELDING REPORT</div><h1>Fielding</h1><div class="hero-bottom"><div class="hero-desc">守備部門の評価・比較データ。<br>FIELDING DEPARTMENT / 2026</div><div class="hero-year">SEASON<b>2026</b></div></div></div>
+<div class="section-head"><span class="num">01</span><h2>Department overview</h2><div class="rule"></div><small>SUMMARY</small></div>
+<div class="lead-grid">
+<div class="lead-stat"><div class="stat-label">AVG. SCORE</div><div class="stat-number">68.9</div><div class="stat-foot">部門平均</div></div>
+<div class="lead-stat"><div class="stat-label">BEST SCORE</div><div class="stat-number red">95.4</div><div class="stat-foot">最高評価</div></div>
+<div class="lead-stat"><div class="stat-label">PLAYERS</div><div class="stat-number">198</div><div class="stat-foot">対象選手</div></div>
+<div class="lead-stat"><div class="stat-label">TOP 10 AVG.</div><div class="stat-number">87.6</div><div class="stat-foot">上位10名平均</div></div>
 </div>
-<div class="panel">
-<div class="eyebrow">BATTING / 04 ITEMS</div>
-<div class="glossary-row"><div class="glossary-code">BATT-01</div><div class="glossary-name">METRIC 01</div><div class="glossary-desc">打撃部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
-<div class="glossary-row"><div class="glossary-code">BATT-02</div><div class="glossary-name">METRIC 02</div><div class="glossary-desc">打撃部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
-<div class="glossary-row"><div class="glossary-code">BATT-03</div><div class="glossary-name">METRIC 03</div><div class="glossary-desc">打撃部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
-<div class="glossary-row"><div class="glossary-code">BATT-04</div><div class="glossary-name">METRIC 04</div><div class="glossary-desc">打撃部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
+<div class="section-head"><span class="num">02</span><h2>Profile analysis</h2><div class="rule"></div><small>RADAR</small></div>
+<div class="chart-panel"><div class="chart-title">評価プロファイル</div><div class="chart-sub">INDEX 01 — 05</div><div class="chart-area large"><canvas id="fieldRadar"></canvas></div></div>
+<div class="section-head"><span class="num">03</span><h2>Leaderboard</h2><div class="rule"></div><small>TOP 10</small></div>
+<div class="table-box"><div class="table-heading"><b>FIELDING RANKINGS</b><span>2026 SEASON</span></div><div class="table-scroll"><table><thead><tr><th>RK</th><th>PLAYER</th><th>TEAM</th><th>POS</th><th>VALUE</th></tr></thead><tbody>
+<tr><td class="rank">01</td><td class="name">東雲 司</td><td>NAG</td><td>SS</td><td class="value best">95.4</td></tr>
+<tr><td class="rank">02</td><td class="name">久我 悠</td><td>SEN</td><td>CF</td><td class="value">92.8</td></tr>
+<tr><td class="rank">03</td><td class="name">神崎 玲</td><td>TKY</td><td>2B</td><td class="value">90.6</td></tr>
+<tr><td class="rank">04</td><td class="name">一ノ瀬 律</td><td>OSK</td><td>RF</td><td class="value">88.1</td></tr>
+<tr><td class="rank">05</td><td class="name">桐谷 新</td><td>NAG</td><td>3B</td><td class="value">86.7</td></tr>
+</tbody></table></div><div class="table-note">ALL PLAYERS AND RECORDS ARE FICTIONAL.</div></div>
+</section>
+
+<section class="page" id="glossary">
+<div class="hero"><div class="kicker">05 — REFERENCE</div><h1>Glossary</h1><div class="hero-bottom"><div class="hero-desc">掲載指標の定義・評価方法。<br>INDEX DIRECTORY / 2026</div><div class="hero-year">TOTAL<b>12 ITEMS</b></div></div></div>
+<p class="intro-copy">NPB FRAUD+で使用する独自評価項目の一覧。指標の名称・定義・算出方法は今後設定します。</p>
+<div class="section-head"><span class="num">01</span><h2>Pitching indices</h2><div class="rule"></div><small>04 ITEMS</small></div>
+<div class="glossary">
+<div class="glossary-item"><div class="glossary-meta"><span>PITCH-01</span><span>01 / 04</span></div><div class="glossary-name">INDEX 01</div><div class="glossary-desc">投手部門の評価項目。名称・定義は未設定。</div></div>
+<div class="glossary-item"><div class="glossary-meta"><span>PITCH-02</span><span>02 / 04</span></div><div class="glossary-name">INDEX 02</div><div class="glossary-desc">投手部門の評価項目。名称・定義は未設定。</div></div>
+<div class="glossary-item"><div class="glossary-meta"><span>PITCH-03</span><span>03 / 04</span></div><div class="glossary-name">INDEX 03</div><div class="glossary-desc">投手部門の評価項目。名称・定義は未設定。</div></div>
+<div class="glossary-item"><div class="glossary-meta"><span>PITCH-04</span><span>04 / 04</span></div><div class="glossary-name">INDEX 04</div><div class="glossary-desc">投手部門の評価項目。名称・定義は未設定。</div></div>
 </div>
-<div class="panel">
-<div class="eyebrow">FIELDING / 04 ITEMS</div>
-<div class="glossary-row"><div class="glossary-code">FIELD-01</div><div class="glossary-name">METRIC 01</div><div class="glossary-desc">守備部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
-<div class="glossary-row"><div class="glossary-code">FIELD-02</div><div class="glossary-name">METRIC 02</div><div class="glossary-desc">守備部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
-<div class="glossary-row"><div class="glossary-code">FIELD-03</div><div class="glossary-name">METRIC 03</div><div class="glossary-desc">守備部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
-<div class="glossary-row"><div class="glossary-code">FIELD-04</div><div class="glossary-name">METRIC 04</div><div class="glossary-desc">守備部門の評価項目。詳細な名称・定義・算出方法は後日設定。</div></div>
+<div class="section-head"><span class="num">02</span><h2>Batting indices</h2><div class="rule"></div><small>04 ITEMS</small></div>
+<div class="glossary">
+<div class="glossary-item"><div class="glossary-meta"><span>BATT-01</span><span>01 / 04</span></div><div class="glossary-name">INDEX 01</div><div class="glossary-desc">打撃部門の評価項目。名称・定義は未設定。</div></div>
+<div class="glossary-item"><div class="glossary-meta"><span>BATT-02</span><span>02 / 04</span></div><div class="glossary-name">INDEX 02</div><div class="glossary-desc">打撃部門の評価項目。名称・定義は未設定。</div></div>
+<div class="glossary-item"><div class="glossary-meta"><span>BATT-03</span><span>03 / 04</span></div><div class="glossary-name">INDEX 03</div><div class="glossary-desc">打撃部門の評価項目。名称・定義は未設定。</div></div>
+<div class="glossary-item"><div class="glossary-meta"><span>BATT-04</span><span>04 / 04</span></div><div class="glossary-name">INDEX 04</div><div class="glossary-desc">打撃部門の評価項目。名称・定義は未設定。</div></div>
+</div>
+<div class="section-head"><span class="num">03</span><h2>Fielding indices</h2><div class="rule"></div><small>04 ITEMS</small></div>
+<div class="glossary">
+<div class="glossary-item"><div class="glossary-meta"><span>FIELD-01</span><span>01 / 04</span></div><div class="glossary-name">INDEX 01</div><div class="glossary-desc">守備部門の評価項目。名称・定義は未設定。</div></div>
+<div class="glossary-item"><div class="glossary-meta"><span>FIELD-02</span><span>02 / 04</span></div><div class="glossary-name">INDEX 02</div><div class="glossary-desc">守備部門の評価項目。名称・定義は未設定。</div></div>
+<div class="glossary-item"><div class="glossary-meta"><span>FIELD-03</span><span>03 / 04</span></div><div class="glossary-name">INDEX 03</div><div class="glossary-desc">守備部門の評価項目。名称・定義は未設定。</div></div>
+<div class="glossary-item"><div class="glossary-meta"><span>FIELD-04</span><span>04 / 04</span></div><div class="glossary-name">INDEX 04</div><div class="glossary-desc">守備部門の評価項目。名称・定義は未設定。</div></div>
 </div>
 </section>
 </main>
 
 <footer class="footer">
 <div class="footer-inner">
-<div>NPB FRAUD+ <span class="accent">/</span> BASEBALL INTELLIGENCE</div>
-<div>EST. 2026</div>
-<div class="disclaimer">FICTIONAL DATA PROJECT. ALL PLAYERS, TEAMS AND STATISTICS ARE FICTIONAL.</div>
+<div class="footer-brand">NPB FRAUD<span>+</span></div>
+<div class="footer-line"></div>
+<div class="footer-bottom"><span>BASEBALL INTELLIGENCE</span><span>EST. 2026</span><span>FICTIONAL DATA PROJECT</span></div>
+<div class="footer-note">NPB FRAUD+ IS A FICTIONAL STATISTICAL PROJECT. ALL PLAYERS, TEAMS AND STATISTICS DISPLAYED ON THIS WEBSITE ARE INVENTED.</div>
 </div>
 </footer>
 
 <script>
 const menu=document.getElementById('menu');
-const menuButton=document.getElementById('menuButton');
+const menuBtn=document.getElementById('menuBtn');
 const pages=['overview','pitching','batting','fielding','glossary'];
 let charts=[];
-
-menuButton.addEventListener('click',()=>{
- const open=menu.classList.toggle('open');
- menuButton.classList.toggle('active',open);
- menuButton.setAttribute('aria-expanded',open);
-});
-function showPage(page){
- pages.forEach(p=>document.getElementById(p).classList.toggle('active',p===page));
- document.querySelectorAll('.menu button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
- menu.classList.remove('open');
- menuButton.classList.remove('active');
- menuButton.setAttribute('aria-expanded','false');
+function toggleMenu(open){
+ menu.classList.toggle('open',open);
+ menuBtn.classList.toggle('open',open);
+ menuBtn.setAttribute('aria-expanded',String(open));
+}
+menuBtn.addEventListener('click',()=>toggleMenu(!menu.classList.contains('open')));
+function navigate(id){
+ if(!pages.includes(id))return;
+ document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
+ document.querySelectorAll('.menu a').forEach(a=>a.classList.toggle('current',a.dataset.page===id));
+ toggleMenu(false);
+ history.replaceState(null,'','#'+id);
  window.scrollTo({top:0,behavior:'smooth'});
- setTimeout(()=>charts.forEach(c=>c.resize()),80);
+ setTimeout(()=>charts.forEach(c=>c.resize()),100);
 }
-document.querySelectorAll('.menu button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
-document.addEventListener('click',e=>{
- if(!menu.contains(e.target)&&!menuButton.contains(e.target)){
-  menu.classList.remove('open');
-  menuButton.classList.remove('active');
-  menuButton.setAttribute('aria-expanded','false');
- }
-});
-Chart.defaults.font.family="Inter,sans-serif";
-Chart.defaults.font.size=10;
-Chart.defaults.color="#78818a";
+document.querySelectorAll('.menu a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();navigate(a.dataset.page)}));
+document.addEventListener('click',e=>{if(!menu.contains(e.target)&&!menuBtn.contains(e.target))toggleMenu(false)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleMenu(false)});
+if(pages.includes(location.hash.slice(1)))navigate(location.hash.slice(1));
+
+Chart.defaults.font.family="'DM Mono', monospace";
+Chart.defaults.font.size=9;
+Chart.defaults.color='#858b8d';
+Chart.defaults.borderColor='#e5e7e4';
 Chart.defaults.plugins.legend.display=false;
-Chart.defaults.plugins.tooltip.backgroundColor="#101820";
+Chart.defaults.plugins.tooltip.backgroundColor='#171b1e';
 Chart.defaults.plugins.tooltip.padding=10;
-const grid={color:'#edf0ef',drawBorder:false};
-function chart(id,config){
+const grid={color:'#e9ebe8',drawBorder:false};
+function makeChart(id,type,data,options){
  const el=document.getElementById(id);
- if(!el)return;
- charts.push(new Chart(el,config));
+ if(el)charts.push(new Chart(el,{type,data,options:{responsive:true,maintainAspectRatio:false,...options}}));
 }
-chart('overviewLine',{type:'line',data:{labels:['APR','MAY','JUN','JUL','AUG','SEP','OCT'],datasets:[{data:[61,66,64,73,70,79,78],borderColor:'#e34b4b',backgroundColor:'rgba(227,75,75,.08)',fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#e34b4b',borderWidth:2}]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{min:40,max:100,grid}}}});
-chart('overviewBar',{type:'bar',data:{labels:['PITCH','BATT','FIELD'],datasets:[{data:[72.6,76.3,68.9],backgroundColor:['#273d4b','#e34b4b','#8b9b9c'],borderRadius:2,barThickness:24}]},options:{maintainAspectRatio:false,scales:{x:{grid:{display:false}},y:{min:0,max:100,grid}}}});
-chart('pitchScatter',{type:'scatter',data:{datasets:[{data:[{x:22,y:82},{x:31,y:75},{x:45,y:88},{x:51,y:67},{x:58,y:91},{x:64,y:72},{x:70,y:84},{x:78,y:61},{x:83,y:94},{x:91,y:78},{x:37,y:59},{x:48,y:79},{x:68,y:96},{x:75,y:73}],backgroundColor:'#e34b4b',pointRadius:5}]},options:{maintainAspectRatio:false,scales:{x:{title:{display:true,text:'INDEX 01'},min:0,max:100,grid},y:{title:{display:true,text:'INDEX 02'},min:0,max:100,grid}}}});
-chart('battingBar',{type:'bar',data:{labels:['一ノ瀬 律','神崎 玲','桐谷 新','御影 蓮','雨宮 湊','久我 悠','東雲 司','藤堂 玲'],datasets:[{data:[98.1,96.8,93.5,91.4,89.7,87.2,85.6,83.1],backgroundColor:'#e34b4b',borderRadius:2,barThickness:13}]},options:{indexAxis:'y',maintainAspectRatio:false,scales:{x:{min:0,max:100,grid},y:{grid:{display:false}}}}});
-chart('fieldRadar',{type:'radar',data:{labels:['INDEX 01','INDEX 02','INDEX 03','INDEX 04','INDEX 05'],datasets:[{data:[85,72,93,66,88],borderColor:'#e34b4b',backgroundColor:'rgba(227,75,75,.12)',pointBackgroundColor:'#e34b4b',borderWidth:2,pointRadius:3}]},options:{maintainAspectRatio:false,scales:{r:{min:0,max:100,ticks:{display:false,stepSize:25},grid:{color:'#e5e9e8'},angleLines:{color:'#e5e9e8'},pointLabels:{font:{size:9}}}}}});
+makeChart('distChart','bar',{
+ labels:['0–20','20–40','40–60','60–80','80–100'],
+ datasets:[{data:[12,48,126,173,69],backgroundColor:['#c7ccca','#c7ccca','#a9b0ad','#d83b3b','#d83b3b'],borderRadius:0,barPercentage:.85,categoryPercentage:.85}]
+},{scales:{x:{grid:{display:false}},y:{beginAtZero:true,grid}}});
+
+makeChart('deptChart','bar',{
+ labels:['PITCH','BATT','FIELD'],
+ datasets:[{data:[72.6,76.3,68.9],backgroundColor:['#252d30','#d83b3b','#899493'],borderRadius:0,barThickness:27}]
+},{scales:{x:{grid:{display:false}},y:{min:0,max:100,grid}}});
+
+makeChart('pitchScatter','scatter',{
+ datasets:[{data:[{x:22,y:82},{x:31,y:75},{x:45,y:88},{x:51,y:67},{x:58,y:91},{x:64,y:72},{x:70,y:84},{x:78,y:61},{x:83,y:94},{x:91,y:78},{x:37,y:59},{x:48,y:79},{x:68,y:96},{x:75,y:73}],backgroundColor:'#d83b3b',pointRadius:5,pointHoverRadius:7}]
+},{scales:{x:{min:0,max:100,title:{display:true,text:'INDEX 01'},grid},y:{min:0,max:100,title:{display:true,text:'INDEX 02'},grid}}});
+
+makeChart('batChart','bar',{
+ labels:['一ノ瀬','神崎','桐谷','御影','雨宮','久我','東雲','藤堂'],
+ datasets:[{data:[98.1,96.8,93.5,91.4,89.7,87.2,85.6,83.1],backgroundColor:'#d83b3b',borderRadius:0,barThickness:14}]
+},{indexAxis:'y',scales:{x:{min:0,max:100,grid},y:{grid:{display:false}}}});
+
+makeChart('fieldRadar','radar',{
+ labels:['INDEX 01','INDEX 02','INDEX 03','INDEX 04','INDEX 05'],
+ datasets:[{data:[85,72,93,66,88],borderColor:'#d83b3b',backgroundColor:'rgba(216,59,59,.10)',pointBackgroundColor:'#d83b3b',pointRadius:3,borderWidth:2}]
+},{scales:{r:{min:0,max:100,ticks:{display:false},grid:{color:'#e5e7e4'},angleLines:{color:'#e5e7e4'},pointLabels:{font:{size:9}}}}});
 </script>
 </body>
 </html>
