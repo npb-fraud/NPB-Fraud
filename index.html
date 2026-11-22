@@ -3,191 +3,276 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#101113">
-<title>NPB FRAUD+ — Baseball Analytics</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101923">
+<title>NPB Fraud+ | Baseball Data Institute</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#101113;--panel:#191a1d;--line:#303135;--red:#ed304b;--white:#f1f0eb;--muted:#85858a;--mono:'DM Mono',monospace;--display:'Barlow Condensed',sans-serif}
+:root{--bg:#f3f4f2;--paper:#fff;--ink:#17232e;--muted:#78818a;--line:#dfe3e3;--navy:#101923;--red:#d83b43;--soft:#f7e9e9;--green:#547b6c;--mono:"DM Mono",monospace;--display:"Barlow Condensed",sans-serif;--jp:"Noto Sans JP",sans-serif}
 *{box-sizing:border-box}
-body{margin:0;background:#08090a;color:var(--white);font-family:'Noto Sans JP',sans-serif}
-#app{max-width:480px;min-height:100dvh;margin:auto;background:var(--bg);padding-bottom:82px;overflow:hidden;position:relative}
-button{font:inherit;color:inherit;cursor:pointer}
-header{height:65px;padding:0 21px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
-.brand{display:flex;align-items:center;gap:10px}
-.brand-mark{width:34px;height:34px;background:var(--red);display:grid;place-items:center;font:800 23px var(--display);color:white;transform:skew(-7deg)}
-.brand-name{font:800 21px var(--display);letter-spacing:1px}
-.brand-name span{color:var(--red)}
-.brand-sub{font:8px var(--mono);letter-spacing:1.2px;color:var(--muted)}
-.header-right{font:10px var(--mono);color:var(--muted)}
-.topnav{display:flex;gap:25px;padding:0 21px;overflow:auto;border-bottom:1px solid var(--line);scrollbar-width:none}
-.topnav::-webkit-scrollbar{display:none}
-.topnav button{background:none;border:0;padding:15px 0 13px;white-space:nowrap;font-size:10px;letter-spacing:1px;color:var(--muted);position:relative}
-.topnav button.active{color:var(--white)}
-.topnav button.active:after{content:"";position:absolute;bottom:0;left:0;width:100%;height:2px;background:var(--red)}
-main{padding:0 21px}
-.eyebrow{font:10px var(--mono);letter-spacing:1.8px;color:var(--red)}
-.hero{padding:34px 0 27px;border-bottom:1px solid var(--line);position:relative}
-.hero:after{content:"+";position:absolute;right:3px;top:34px;font:100px var(--display);color:#242529;line-height:1}
-.hero h1{font:900 clamp(65px,18vw,85px)/.82 var(--display);letter-spacing:-2px;margin:19px 0 15px}
+body{margin:0;background:#e7e9e8;color:var(--ink);font-family:var(--jp);font-size:13px}
+button{font:inherit;cursor:pointer}
+.app{width:100%;max-width:520px;min-height:100dvh;margin:auto;background:var(--bg);padding-bottom:82px;box-shadow:0 0 40px #14202b12}
+.top{background:var(--navy);color:white;padding:17px 21px 0}
+.brand{display:flex;align-items:center;justify-content:space-between;padding-bottom:15px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:34px;height:34px;border:1px solid #ffffff60;display:grid;place-items:center;font:700 19px var(--display);letter-spacing:-1px}
+.logo-name{font:700 21px var(--display);letter-spacing:.5px}
+.logo-name span{color:#e65a60}
+.logo-sub{font:9px var(--mono);letter-spacing:1.5px;color:#9da8b2;margin-top:1px}
+.issue{text-align:right;color:#9da8b2;font:9px var(--mono);line-height:1.7}
+.issue b{color:#fff;font-weight:400}
+.topline{height:1px;background:#ffffff24}
+.nav{display:flex;gap:24px;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav button{flex:none;background:none;border:0;color:#8d99a4;padding:13px 0 12px;font:600 11px var(--jp);letter-spacing:.3px;border-bottom:2px solid transparent}
+.nav button.active{color:white;border-color:var(--red)}
+main{padding:0 19px}
+.page{display:none}
+.page.active{display:block}
+.eyebrow{font:10px var(--mono);letter-spacing:1.4px;color:var(--red);text-transform:uppercase}
+.hero{padding:25px 0 20px;border-bottom:1px solid var(--line)}
+.hero h1{font:800 46px/.91 var(--display);letter-spacing:-.8px;margin:9px 0 10px;color:var(--navy)}
 .hero h1 span{color:var(--red)}
-.hero-desc{font-size:11px;line-height:2;color:#a5a5a7;letter-spacing:.2px}
-.season{display:flex;justify-content:space-between;align-items:center;margin-top:25px;font:10px var(--mono);color:var(--muted)}
-.season strong{color:var(--white);font-weight:400}
-.section{padding:25px 0;border-bottom:1px solid var(--line)}
-.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px}
-.section-title{font:700 23px var(--display);letter-spacing:.6px}
-.section-title small{font:9px var(--mono);color:var(--muted);margin-left:7px}
-.more{background:none;border:0;color:var(--red);font:10px var(--mono);letter-spacing:1px}
-.feature{background:var(--panel);padding:19px;position:relative;overflow:hidden}
-.feature:after{content:"F+";position:absolute;right:-7px;bottom:-28px;font:900 115px var(--display);color:#222327}
-.feature-label{font:9px var(--mono);color:var(--red);letter-spacing:1.4px}
-.feature h2{font:800 38px var(--display);margin:13px 0 4px;position:relative;z-index:1}
-.feature p{font-size:10px;color:var(--muted);margin:0}
-.feature-foot{display:flex;justify-content:space-between;align-items:center;margin-top:22px;padding-top:12px;border-top:1px solid var(--line);font:9px var(--mono);color:var(--muted);position:relative;z-index:1}
-.feature-foot b{font-size:10px;color:var(--white);font-weight:400}
-.metrics{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);border-left:1px solid var(--line)}
-.metric{padding:16px 13px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
-.metric-label{font:9px var(--mono);color:var(--muted);letter-spacing:1px}
-.metric-value{font:700 35px var(--display);margin:7px 0 2px}
-.metric-value em{font-style:normal;color:var(--red)}
-.metric-note{font-size:9px;color:var(--muted)}
-.data-row{display:flex;align-items:center;padding:13px 0;border-bottom:1px solid var(--line);gap:13px}
-.data-no{font:12px var(--mono);color:var(--red);width:22px}
-.data-info{flex:1;min-width:0}
-.data-name{font-size:12px;font-weight:600}
-.data-meta{font:9px var(--mono);color:var(--muted);margin-top:5px}
-.data-value{text-align:right;font:17px var(--display);color:var(--white)}
-.data-value small{display:block;font:8px var(--mono);color:var(--muted)}
-.disclaimer{padding:20px 0 8px;font:8px/1.8 var(--mono);color:#66676c;letter-spacing:.5px}
-.page-heading{padding:30px 0 22px;border-bottom:1px solid var(--line)}
-.page-heading h1{font:800 48px/.95 var(--display);margin:12px 0}
-.page-heading p{font-size:10px;color:var(--muted);line-height:1.8}
-.search{width:100%;background:#191a1d;border:1px solid var(--line);padding:13px;color:white;font:11px var(--mono);outline:none;margin:18px 0}
-.search:focus{border-color:var(--red)}
-.filters{display:flex;gap:8px;overflow:auto;padding-bottom:15px;scrollbar-width:none}
-.filters button{background:transparent;border:1px solid var(--line);padding:8px 12px;font:9px var(--mono);color:var(--muted);white-space:nowrap}
-.filters button.active{background:var(--red);border-color:var(--red);color:white}
-.table-head{display:flex;justify-content:space-between;padding:12px 0;font:9px var(--mono);color:var(--muted);border-bottom:1px solid var(--line)}
-.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;height:68px;background:#151619;border-top:1px solid var(--line);display:flex;justify-content:space-around;z-index:10;padding-bottom:env(safe-area-inset-bottom)}
-.bottom button{flex:1;border:0;background:none;color:#77777d;font:8px var(--mono);letter-spacing:.4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
-.bottom button span{font-size:18px;line-height:1}
+.hero p{font-size:11px;line-height:1.9;color:#69747d;margin:0;max-width:310px}
+.meta-row{display:flex;justify-content:space-between;align-items:center;margin-top:17px;font:9px var(--mono);color:#8a939a}
+.status{display:inline-flex;align-items:center;gap:6px;color:#aab3ba}
+.status:before{content:"";width:6px;height:6px;background:#d84b50;border-radius:50%}
+.section{margin-top:23px}
+.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:11px}
+.section-title{font-size:14px;font-weight:800;letter-spacing:.1px}
+.section-en{font:9px var(--mono);color:#929ba1;margin-top:3px;letter-spacing:.8px}
+.more{border:0;background:none;color:var(--red);font:10px var(--mono);padding:5px 0}
+.feature{background:var(--navy);color:white;padding:17px 17px 15px;position:relative;overflow:hidden}
+.feature:after{content:"F+";position:absolute;right:9px;top:-20px;font:800 105px var(--display);color:#ffffff08}
+.feature-top{display:flex;justify-content:space-between;color:#aab5bd;font:9px var(--mono);letter-spacing:1px}
+.feature-label{color:#f06a70}
+.feature-number{font:800 53px/.95 var(--display);margin:17px 0 5px;letter-spacing:-1px}
+.feature-caption{font-size:11px;color:#c1c9ce}
+.feature-bottom{display:flex;gap:25px;border-top:1px solid #ffffff25;margin-top:16px;padding-top:12px}
+.feature-stat small{display:block;color:#8e9aa4;font:9px var(--mono);margin-bottom:4px}
+.feature-stat b{font:600 15px var(--mono)}
+.metrics{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.metric{padding:12px 13px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:#ffffff70}
+.metric small{display:block;font:9px var(--mono);color:#8b949b;letter-spacing:.6px}
+.metric strong{display:block;font:600 25px var(--display);margin:5px 0 1px;color:var(--navy)}
+.metric span{font-size:9px;color:#8b949b}
+.table-wrap{overflow-x:auto;background:var(--paper);border-top:2px solid var(--navy);scrollbar-width:thin}
+table{width:100%;border-collapse:collapse;white-space:nowrap;font-size:11px}
+th{text-align:right;padding:10px 9px;color:#8b949b;font:9px var(--mono);background:#f8f9f8;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left;padding-left:12px}
+td{text-align:right;padding:11px 9px;border-bottom:1px solid #edf0ef;font:11px var(--mono)}
+td:first-child{font-family:var(--jp);font-weight:600}
+tr:last-child td{border-bottom:0}
+.rank{color:#a0a8ae;font:10px var(--mono);margin-right:8px}
+.player-team{display:block;font:9px var(--mono);color:#929ba1;margin-top:3px}
+.emphasis{color:var(--red);font-weight:500}
+.note{font-size:10px;color:#929ba1;line-height:1.8;margin:9px 0 0}
+.notice{margin-top:22px;padding:12px 13px;border:1px solid #e4c8c8;background:#fbf3f2;color:#7f5556;font-size:10px;line-height:1.8}
+.notice b{font:10px var(--mono);letter-spacing:.5px}
+.page-heading{padding:25px 0 17px;border-bottom:1px solid var(--line)}
+.page-heading h1{font:800 38px/.95 var(--display);margin:7px 0 5px;color:var(--navy)}
+.page-heading p{font-size:10px;color:#879199;margin:0}
+.controls{display:flex;gap:7px;margin:15px 0 12px;align-items:center}
+.control{border:1px solid var(--line);background:#fff;padding:8px 11px;color:#69747d;font-size:10px}
+.control.active{background:var(--navy);border-color:var(--navy);color:white}
+.search{min-width:0;flex:1;border:1px solid var(--line);background:white;padding:9px 10px;font:10px var(--jp);outline:none}
+.search:focus{border-color:var(--navy)}
+.data-summary{display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid var(--line);font:9px var(--mono);color:#8a939a}
+.profile{background:white;border-top:2px solid var(--navy);margin-top:12px}
+.profile-row{display:flex;align-items:center;justify-content:space-between;padding:13px 12px;border-bottom:1px solid #edf0ef}
+.profile-name{font-weight:700;font-size:12px}
+.profile-name small{display:block;color:#929ba1;font:9px var(--mono);margin-top:4px}
+.profile-value{text-align:right;font:600 20px var(--display);color:var(--navy)}
+.profile-value small{display:block;font:9px var(--mono);color:#8b949b}
+.bottom{position:fixed;z-index:5;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:9px 8px calc(9px + env(safe-area-inset-bottom))}
+.bottom button{background:none;border:0;color:#929ba1;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px}
+.bottom button b{font:600 17px var(--display);letter-spacing:.3px}
 .bottom button.active{color:var(--red)}
-.bottom button.active span{transform:translateY(-2px)}
-.empty{padding:35px 0;text-align:center;font:10px var(--mono);color:var(--muted)}
-@media(min-width:481px){body{padding:20px 0}#app{min-height:calc(100dvh - 40px);border:1px solid #292a2d}}
+.footer{margin:26px -19px 0;background:var(--navy);color:#9ba7b0;padding:19px;font-size:9px;line-height:1.9}
+.footer strong{font:700 17px var(--display);color:#fff;letter-spacing:.5px}
+.footer span{color:#e65a60}
+@media(min-width:521px){body{background:#dfe2e1}.app{min-height:100vh}}
 </style>
 </head>
 <body>
-<div id="app">
-<header>
+<div class="app">
+<header class="top">
  <div class="brand">
-  <div class="brand-mark">F+</div>
-  <div><div class="brand-name">NPB <span>FRAUD+</span></div><div class="brand-sub">INDEPENDENT BASEBALL LAB</div></div>
+  <div class="logo">
+   <div class="logo-mark">F+</div>
+   <div><div class="logo-name">NPB <span>FRAUD+</span></div><div class="logo-sub">BASEBALL DATA INSTITUTE</div></div>
+  </div>
+  <div class="issue">RESEARCH DIVISION<br><b>VOL. 01 / 2026</b></div>
  </div>
- <div class="header-right">VOL. 01 / 2026</div>
+ <div class="topline"></div>
+ <nav class="nav">
+  <button class="active" data-page="home">HOME</button>
+  <button data-page="batters">BATTERS</button>
+  <button data-page="pitchers">PITCHERS</button>
+  <button data-page="rankings">RANKINGS</button>
+ </nav>
 </header>
-<nav class="topnav" id="topnav">
- <button class="active" data-page="home">HOME</button>
- <button data-page="players">PLAYERS</button>
- <button data-page="batting">BATTING</button>
- <button data-page="pitching">PITCHING</button>
- <button data-page="teams">TEAMS</button>
- <button data-page="ranking">RANKINGS</button>
-</nav>
-<main id="content"></main>
+
+<main>
+<section class="page active" id="home">
+ <div class="hero">
+  <div class="eyebrow">THE FICTIONAL BASEBALL DATABASE</div>
+  <h1>NUMBERS<br>DON'T <span>LIE.</span></h1>
+  <p>数字は、ときに真実よりも雄弁だ。<br>NPB Fraud+ は独自の視点から野球を再構築する、架空のデータ研究機関です。</p>
+  <div class="meta-row"><span>SEASON 2026</span><span class="status">DATABASE ONLINE</span></div>
+ </div>
+
+ <div class="section">
+  <div class="section-head"><div><div class="section-title">今季の研究データ</div><div class="section-en">SEASON OVERVIEW</div></div><span class="eyebrow">2026</span></div>
+  <div class="feature">
+   <div class="feature-top"><span class="feature-label">FRAUD+ INDEX</span><span>NO. 001</span></div>
+   <div class="feature-number">108.42</div>
+   <div class="feature-caption">リーグ平均指数 / LEAGUE INDEX</div>
+   <div class="feature-bottom">
+    <div class="feature-stat"><small>BATTER DATA</small><b>486</b></div>
+    <div class="feature-stat"><small>PITCHER DATA</small><b>312</b></div>
+    <div class="feature-stat"><small>METRICS</small><b>24</b></div>
+   </div>
+  </div>
+ </div>
+
+ <div class="section">
+  <div class="section-head"><div><div class="section-title">注目指標</div><div class="section-en">FEATURED METRICS</div></div></div>
+  <div class="metrics">
+   <div class="metric"><small>FRAUD wRC+</small><strong>142.8</strong><span>攻撃力補正指数</span></div>
+   <div class="metric"><small>FRAUD FIP</small><strong>2.14</strong><span>投球内容評価</span></div>
+   <div class="metric"><small>CLUTCH-X</small><strong>+3.82</strong><span>勝負強さ指数</span></div>
+   <div class="metric"><small>LUCK RATE</small><strong>18.6%</strong><span>幸運度推定値</span></div>
+  </div>
+ </div>
+
+ <div class="section">
+  <div class="section-head"><div><div class="section-title">打者ランキング</div><div class="section-en">TOP BATTERS / FRAUD wRC+</div></div><button class="more" onclick="showPage('batters')">VIEW ALL →</button></div>
+  <div class="table-wrap"><table>
+   <thead><tr><th>PLAYER</th><th>G</th><th>AVG</th><th>HR</th><th>F-wRC+</th></tr></thead>
+   <tbody id="home-batters"></tbody>
+  </table></div>
+ </div>
+
+ <div class="section">
+  <div class="section-head"><div><div class="section-title">投手ランキング</div><div class="section-en">TOP PITCHERS / FRAUD FIP</div></div><button class="more" onclick="showPage('pitchers')">VIEW ALL →</button></div>
+  <div class="table-wrap"><table>
+   <thead><tr><th>PLAYER</th><th>G</th><th>IP</th><th>ERA</th><th>F-FIP</th></tr></thead>
+   <tbody id="home-pitchers"></tbody>
+  </table></div>
+ </div>
+ <div class="notice"><b>IMPORTANT NOTICE / 重要事項</b><br>本サイトに掲載されている選手・チーム・成績・指標・分析結果はすべて架空のものです。実在の記録や公式データを示すものではありません。</div>
+</section>
+
+<section class="page" id="batters">
+ <div class="page-heading"><div class="eyebrow">PLAYER DATABASE / 01</div><h1>BATTERS</h1><p>打者データベース — 架空の独自指標による評価</p></div>
+ <div class="controls"><input class="search" id="b-search" placeholder="選手名を検索"><button class="control active" data-sort="wrc">wRC+</button><button class="control" data-sort="hr">HR</button></div>
+ <div class="data-summary"><span>2026 SEASON</span><span id="b-count">0 PLAYERS</span></div>
+ <div class="table-wrap"><table><thead><tr><th>PLAYER</th><th>G</th><th>AVG</th><th>HR</th><th>RBI</th><th>F-wRC+</th><th>WAR+</th></tr></thead><tbody id="b-table"></tbody></table></div>
+ <p class="note">※ F-wRC+、WAR+ は当機関独自の架空指標です。</p>
+</section>
+
+<section class="page" id="pitchers">
+ <div class="page-heading"><div class="eyebrow">PLAYER DATABASE / 02</div><h1>PITCHERS</h1><p>投手データベース — 架空の独自指標による評価</p></div>
+ <div class="controls"><input class="search" id="p-search" placeholder="選手名を検索"><button class="control active" data-sort="fip">F-FIP</button><button class="control" data-sort="era">ERA</button></div>
+ <div class="data-summary"><span>2026 SEASON</span><span id="p-count">0 PLAYERS</span></div>
+ <div class="table-wrap"><table><thead><tr><th>PLAYER</th><th>G</th><th>IP</th><th>ERA</th><th>WHIP</th><th>F-FIP</th><th>WAR+</th></tr></thead><tbody id="p-table"></tbody></table></div>
+ <p class="note">※ F-FIP、WAR+ は当機関独自の架空指標です。</p>
+</section>
+
+<section class="page" id="rankings">
+ <div class="page-heading"><div class="eyebrow">STATISTICAL LEADERS / 03</div><h1>RANKINGS</h1><p>独自指標ランキング — 2026 SEASON</p></div>
+ <div class="controls" id="rank-tabs"><button class="control active" data-kind="wrc">F-wRC+</button><button class="control" data-kind="fip">F-FIP</button><button class="control" data-kind="clutch">CLUTCH-X</button></div>
+ <div class="data-summary"><span id="rank-label">BATTING / F-wRC+</span><span>TOP 5</span></div>
+ <div class="table-wrap"><table><thead><tr><th>RANK</th><th>PLAYER</th><th>TEAM</th><th>VALUE</th></tr></thead><tbody id="rank-table"></tbody></table></div>
+ <div class="section">
+  <div class="section-head"><div><div class="section-title">指標について</div><div class="section-en">ABOUT THE METRICS</div></div></div>
+  <div class="profile">
+   <div class="profile-row"><div class="profile-name">F-wRC+<small>FRAUD WEIGHTED RUN CREATION</small></div><div class="profile-value">100<small>LEAGUE AVG.</small></div></div>
+   <div class="profile-row"><div class="profile-name">F-FIP<small>FRAUD FIELDING INDEPENDENT PITCHING</small></div><div class="profile-value">3.50<small>REFERENCE</small></div></div>
+   <div class="profile-row"><div class="profile-name">CLUTCH-X<small>CLUTCH PERFORMANCE INDEX</small></div><div class="profile-value">0.00<small>REFERENCE</small></div></div>
+  </div>
+ </div>
+ <div class="notice">これらの指標は架空の評価体系に基づいています。実際の野球統計指標との互換性・相関性はありません。</div>
+</section>
+
+<footer class="footer"><strong>NPB <span>FRAUD+</span></strong><br>BASEBALL DATA INSTITUTE<br>FICTIONAL DATA PROJECT / EST. 2026<br><br>ALL DATA AND METRICS ARE FICTIONAL.</footer>
+</main>
+
 <nav class="bottom">
- <button class="active" data-page="home"><span>⌂</span>HOME</button>
- <button data-page="players"><span>♙</span>PLAYERS</button>
- <button data-page="batting"><span>▥</span>BAT</button>
- <button data-page="pitching"><span>⌁</span>PITCH</button>
- <button data-page="ranking"><span>≡</span>RANKING</button>
+ <button class="active" data-page="home"><b>H</b>HOME</button>
+ <button data-page="batters"><b>B</b>BATTERS</button>
+ <button data-page="pitchers"><b>P</b>PITCHERS</button>
+ <button data-page="rankings"><b>R</b>RANKINGS</button>
 </nav>
 </div>
+
 <script>
-const $=s=>document.querySelector(s);
-const players=[
- {id:"001",name:"PLAYER 001",pos:"OF",team:"TEAM A",bat:"148.6",pitch:"—"},
- {id:"002",name:"PLAYER 002",pos:"IF",team:"TEAM B",bat:"139.2",pitch:"—"},
- {id:"003",name:"PLAYER 003",pos:"P",team:"TEAM C",bat:"—",pitch:"162.4"},
- {id:"004",name:"PLAYER 004",pos:"C",team:"TEAM D",bat:"128.5",pitch:"—"},
- {id:"005",name:"PLAYER 005",pos:"P",team:"TEAM E",bat:"—",pitch:"151.8"}
+const batters=[
+{name:"佐伯 透",team:"TOK",g:128,avg:".328",hr:31,rbi:94,wrc:168.4,war:8.2},
+{name:"黒田 蓮",team:"OSA",g:132,avg:".301",hr:38,rbi:102,wrc:159.7,war:7.6},
+{name:"三上 悠",team:"NAG",g:125,avg:".315",hr:24,rbi:81,wrc:148.2,war:6.8},
+{name:"藤堂 玲",team:"FUK",g:137,avg:".289",hr:29,rbi:88,wrc:139.5,war:6.1},
+{name:"相沢 陸",team:"SEN",g:119,avg:".307",hr:19,rbi:72,wrc:132.1,war:5.4},
+{name:"瀬戸 晴",team:"SAP",g:130,avg:".281",hr:26,rbi:79,wrc:127.8,war:5.0},
+{name:"神谷 司",team:"TOK",g:116,avg:".294",hr:17,rbi:65,wrc:121.3,war:4.6}
 ];
-const metric=(label,value,note)=>`<div class="metric"><div class="metric-label">${label}</div><div class="metric-value">${value}</div><div class="metric-note">${note}</div></div>`;
-const row=(p,i,key)=>`<div class="data-row"><div class="data-no">${String(i+1).padStart(2,"0")}</div><div class="data-info"><div class="data-name">${p.name}</div><div class="data-meta">${p.id} / ${p.team} / ${p.pos}</div></div><div class="data-value">${p[key]}<small>${key==="bat"?"FRAUD BAT":"FRAUD PITCH"}</small></div></div>`;
-const heading=(eyebrow,title,desc)=>`<div class="page-heading"><div class="eyebrow">${eyebrow}</div><h1>${title}</h1><p>${desc}</p></div>`;
-function home(){return `
-<div class="hero">
- <div class="eyebrow">INDEPENDENT BASEBALL ANALYTICS / 2026</div>
- <h1>THE<br>NUMBERS<br><span>FAKE.</span></h1>
- <div class="hero-desc">数字を疑え。評価を疑え。<br>野球の新しい見方を、ここから。</div>
- <div class="season"><strong>2026 SEASON / DATABASE</strong><span>EST. 2026 — F+</span></div>
-</div>
-<section class="section">
- <div class="section-head"><div class="section-title">FEATURED <small>01 / ANALYSIS</small></div><span class="eyebrow">F+</span></div>
- <div class="feature">
-  <div class="feature-label">PROPRIETARY METRIC / 001</div>
-  <h2>FRAUD INDEX</h2>
-  <p>独自の評価体系による選手分析</p>
-  <div class="feature-foot"><b>EXPLORE THE METRIC</b><span>↗ &nbsp; 01</span></div>
- </div>
-</section>
-<section class="section">
- <div class="section-head"><div class="section-title">DATABASE <small>02 / OVERVIEW</small></div></div>
- <div class="metrics">
-  ${metric("PLAYER INDEX","480","DEMO RECORDS")}
-  ${metric("BATTING METRICS","12","PROPRIETARY")}
-  ${metric("PITCHING METRICS","14","PROPRIETARY")}
-  ${metric("TEAM INDEX","12","FICTIONAL TEAMS")}
- </div>
-</section>
-<section class="section">
- <div class="section-head"><div class="section-title">TOP PLAYERS <small>03 / FRAUD BAT</small></div><button class="more" onclick="go('players')">VIEW ALL ↗</button></div>
- ${players.filter(p=>p.bat!=="—").slice(0,3).map((p,i)=>row(p,i,"bat")).join("")}
-</section>
-<section class="section">
- <div class="section-head"><div class="section-title">PITCHING LAB <small>04 / FRAUD PITCH</small></div><button class="more" onclick="go('pitching')">VIEW ALL ↗</button></div>
- ${players.filter(p=>p.pitch!=="—").map((p,i)=>row(p,i,"pitch")).join("")}
-</section>
-<div class="disclaimer">NPB FRAUD+ / ALL DATA DISPLAYED ON THIS SITE IS FICTIONAL.<br>NOT AFFILIATED WITH NPB OR ANY PROFESSIONAL BASEBALL ORGANIZATION.</div>
-`}
-function listing(type){
-const configs={
- players:["DATABASE / 01","PLAYER INDEX","選手データベース。架空の選手情報を掲載します。"],
- batting:["ANALYTICS / 02","BATTING LAB","独自の架空打撃指標による評価。"],
- pitching:["ANALYTICS / 03","PITCHING LAB","独自の架空投手指標による評価。"],
- teams:["DATABASE / 04","TEAM INDEX","架空球団のデータベース。"],
- ranking:["LEADERBOARD / 05","RANKINGS","独自指標によるランキング。"]
-};
-let [ey,title,desc]=configs[type];
-let key=type==="pitching"?"pitch":"bat";
-let list=type==="pitching"?players.filter(p=>p.pitch!=="—"):type==="batting"||type==="ranking"?players.filter(p=>p.bat!=="—"):players;
-if(type==="teams")return heading(ey,title,desc)+`<div class="empty">TEAM DATABASE / COMING SOON</div>`;
-return heading(ey,title,desc)+`<input class="search" id="search" placeholder="⌕  SEARCH PLAYER / ID" autocomplete="off"><div class="filters"><button class="active" data-filter="ALL">ALL</button><button data-filter="P">PITCHER</button><button data-filter="H">HITTER</button></div><div class="table-head"><span>PLAYER / INFORMATION</span><span>INDEX</span></div><div id="list">${list.map((p,i)=>row(p,i,key)).join("")}</div><div class="disclaimer">FICTIONAL DATA / DEMO DATABASE</div>`;
+const pitchers=[
+{name:"高瀬 迅",team:"OSA",g:25,ip:"171.2",era:"1.84",whip:"0.91",fip:2.08,war:7.1},
+{name:"水野 蒼",team:"TOK",g:27,ip:"183.0",era:"2.11",whip:"0.98",fip:2.32,war:6.8},
+{name:"桐生 匠",team:"FUK",g:24,ip:"158.1",era:"2.35",whip:"1.02",fip:2.51,war:6.0},
+{name:"新田 海",team:"NAG",g:26,ip:"164.0",era:"2.68",whip:"1.08",fip:2.74,war:5.3},
+{name:"大崎 蓮",team:"SEN",g:23,ip:"149.2",era:"2.91",whip:"1.11",fip:2.89,war:4.9},
+{name:"結城 颯",team:"SAP",g:28,ip:"142.0",era:"3.02",whip:"1.14",fip:3.01,war:4.4}
+];
+let bSort="wrc",pSort="fip",rankKind="wrc";
+const $=id=>document.getElementById(id);
+function showPage(id){
+ document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active",x.id===id));
+ document.querySelectorAll("[data-page]").forEach(x=>x.classList.toggle("active",x.dataset.page===id));
+ window.scrollTo(0,0);
 }
-function render(page){
-$("#content").innerHTML=page==="home"?home():listing(page);
-document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
-const search=$("#search");
-if(search)search.addEventListener("input",filter);
-document.querySelectorAll("[data-filter]").forEach(b=>b.addEventListener("click",()=>{
-document.querySelectorAll("[data-filter]").forEach(x=>x.classList.remove("active"));b.classList.add("active");filter();
+document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
+function playerCell(p){return `${p.name}<span class="player-team">${p.team}</span>`}
+function renderHome(){
+ $("home-batters").innerHTML=[...batters].sort((a,b)=>b.wrc-a.wrc).slice(0,5).map((p,i)=>`<tr><td><span class="rank">${String(i+1).padStart(2,"0")}</span>${p.name}<span class="player-team">${p.team}</span></td><td>${p.g}</td><td>${p.avg}</td><td>${p.hr}</td><td class="emphasis">${p.wrc}</td></tr>`).join("");
+ $("home-pitchers").innerHTML=[...pitchers].sort((a,b)=>a.fip-b.fip).slice(0,5).map((p,i)=>`<tr><td><span class="rank">${String(i+1).padStart(2,"0")}</span>${p.name}<span class="player-team">${p.team}</span></td><td>${p.g}</td><td>${p.ip}</td><td>${p.era}</td><td class="emphasis">${p.fip.toFixed(2)}</td></tr>`).join("");
+}
+function renderBatters(){
+ const q=$("b-search").value.toLowerCase();
+ const data=batters.filter(p=>(p.name+p.team).toLowerCase().includes(q)).sort((a,b)=>b[bSort]-a[bSort]);
+ $("b-count").textContent=data.length+" PLAYERS";
+ $("b-table").innerHTML=data.map(p=>`<tr><td>${playerCell(p)}</td><td>${p.g}</td><td>${p.avg}</td><td>${p.hr}</td><td>${p.rbi}</td><td class="emphasis">${p.wrc}</td><td>${p.war.toFixed(1)}</td></tr>`).join("");
+}
+function renderPitchers(){
+ const q=$("p-search").value.toLowerCase();
+ const data=pitchers.filter(p=>(p.name+p.team).toLowerCase().includes(q)).sort((a,b)=>a[pSort]-b[pSort]);
+ $("p-count").textContent=data.length+" PLAYERS";
+ $("p-table").innerHTML=data.map(p=>`<tr><td>${playerCell(p)}</td><td>${p.g}</td><td>${p.ip}</td><td>${p.era}</td><td>${p.whip}</td><td class="emphasis">${p.fip.toFixed(2)}</td><td>${p.war.toFixed(1)}</td></tr>`).join("");
+}
+function renderRank(){
+ let data,label;
+ if(rankKind==="fip"){data=[...pitchers].sort((a,b)=>a.fip-b.fip).map(p=>({name:p.name,team:p.team,value:p.fip.toFixed(2)}));label="PITCHING / F-FIP"}
+ else if(rankKind==="clutch"){data=batters.map((p,i)=>({name:p.name,team:p.team,value:["+4.82","+3.91","+3.44","+2.87","+2.16","+1.72","+1.31"][i]})).sort((a,b)=>parseFloat(b.value)-parseFloat(a.value));label="BATTING / CLUTCH-X"}
+ else{data=[...batters].sort((a,b)=>b.wrc-a.wrc).map(p=>({name:p.name,team:p.team,value:p.wrc}));label="BATTING / F-wRC+"}
+ $("rank-label").textContent=label;
+ $("rank-table").innerHTML=data.slice(0,5).map((p,i)=>`<tr><td>${String(i+1).padStart(2,"0")}</td><td>${p.name}</td><td>${p.team}</td><td class="emphasis">${p.value}</td></tr>`).join("");
+}
+$("b-search").addEventListener("input",renderBatters);
+$("p-search").addEventListener("input",renderPitchers);
+document.querySelectorAll('[data-sort]').forEach(b=>b.addEventListener("click",()=>{
+ const parent=b.closest(".controls");
+ parent.querySelectorAll("button").forEach(x=>x.classList.remove("active"));b.classList.add("active");
+ if(parent.querySelector("#b-search")){bSort=b.dataset.sort;renderBatters()}
+ else{pSort=b.dataset.sort;renderPitchers()}
 }));
-}
-function filter(){
-const q=($("#search")?.value||"").toLowerCase();
-const f=$("[data-filter].active")?.dataset.filter||"ALL";
-const page=location.hash.slice(1)||"home";
-const key=page==="pitching"?"pitch":"bat";
-const list=page==="pitching"?players.filter(p=>p.pitch!=="—"):page==="batting"||page==="ranking"?players.filter(p=>p.bat!=="—"):players;
-const filtered=list.filter(p=>(p.name+" "+p.id+" "+p.team).toLowerCase().includes(q)&&(f==="ALL"||(f==="P"?p.pos==="P":p.pos!=="P")));
-$("#list").innerHTML=filtered.length?filtered.map((p,i)=>row(p,i,key)).join(""):'<div class="empty">NO RESULTS FOUND</div>';
-}
-function go(page){location.hash=page;render(page)}
-document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.page)));
-window.addEventListener("hashchange",()=>render(location.hash.slice(1)||"home"));
-render(location.hash.slice(1)||"home");
+document.querySelectorAll("[data-kind]").forEach(b=>b.addEventListener("click",()=>{
+ document.querySelectorAll("[data-kind]").forEach(x=>x.classList.remove("active"));b.classList.add("active");rankKind=b.dataset.kind;renderRank();
+}));
+renderHome();renderBatters();renderPitchers();renderRank();
 </script>
 </body>
 </html>
